@@ -1,0 +1,22 @@
+#boardContainer {
+  /* position: relative; */
+  display: grid;
+  height: 400px;
+  width: 400px;
+  background-color: red;
+  grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+  box-sizing: border-box;
+}
+
+.box {
+  height: 100%;
+  width: 100%;
+  border: thick black solid;
+  background-color: green;
+  box-sizing: border-box;
+
+}
+
+[data-contents="empty"] {
+  background-color: red;
+}
