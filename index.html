@@ -2,20 +2,38 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Tic Tac Toe</title>
+  <title>CD Commit 3 Tic Tac Toe</title>
   <link  rel="stylesheet" href="styles.css">
-  <link  rel="shortcut icon" href="shortcut icon goes here">
+  <!-- favicons -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffc40d">
+  <meta name="theme-color" content="#ffffff">
 </head>
 <body>
   <div id="boardContainer">
-    
+    <!-- Javascript-populated -->
   </div>
 
-  <label for="player-one-input">Player One Name</label>
-  <input type="text" name="player-one" id="player-one-input">
-  <label for="player-two-input">Player Two Name</label>
-  <input type="text" name="player-two" id="player-two-input">
+<div id="controls-container">
+  <div id="player-one-container">
+    <ul id="human-computer-toggle-one">
+      <li id="human-one">Human</li>
+      <li id="computer-one">Computer</li>
+    </div>
+    <label for="player-one-input">Player One Name</label>
+    <input type="text" name="player-one" id="player-one-input">
+  </div>
+
+  <div id="player-two-container">
+    <label for="player-two-input">Player Two Name</label>
+    <input type="text" name="player-two" id="player-two-input">
+  </div>
   <button id="reset-board">Reset</button>
+</div>
 
 <!-- Scripts -->
   <script src="board.js"></script>

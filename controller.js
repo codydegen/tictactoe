@@ -74,8 +74,8 @@ function placeHolderFunction(e){
     displayController.swapCurrentPlayer();
     let winner = gameboard.checkWin();
     if(winner !== false) {
-      console.log(winner+' wins!');
       displayController.setMovesAllowed(false);
+      alert(winner+' wins!');
     }
   }
   //console.log(contents);
