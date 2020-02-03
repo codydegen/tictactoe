@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>CD Commit 3 Tic Tac Toe</title>
+  <title>CD Commit 4 Tic Tac Toe</title>
   <link  rel="stylesheet" href="styles.css">
   <!-- favicons -->
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -14,26 +14,51 @@
   <meta name="theme-color" content="#ffffff">
 </head>
 <body>
-  <div id="boardContainer">
+  <header>
+    Tic Tac Toe
+  </header>
+  <div id="board-container">
     <!-- Javascript-populated -->
   </div>
 
 <div id="controls-container">
-  <div id="player-one-container">
+  <div id="player-one-container" class="user-containers">
     <ul id="human-computer-toggle-one">
-      <li id="human-one">Human</li>
-      <li id="computer-one">Computer</li>
-    </div>
+      <li id="human-one" class="active">Human</li>
+      <li id="computer-one" >Computer</li>
+    </ul>
+    <br>
+    <br>
     <label for="player-one-input">Player One Name</label>
     <input type="text" name="player-one" id="player-one-input">
   </div>
 
-  <div id="player-two-container">
+  <div id="player-two-container" class="user-containers">
+    <ul id="human-computer-toggle-two">
+      <li id="human-two" class="active">Human</li>
+      <li id="computer-two" >Computer</li>
+    </ul>
     <label for="player-two-input">Player Two Name</label>
     <input type="text" name="player-two" id="player-two-input">
   </div>
-  <button id="reset-board">Reset</button>
+  <br>
 </div>
+<button id="reset-board">Reset</button>
+
+
+<footer>
+  <a id="contact-info">
+    <div id="git-info">
+    <a href="https://github.com/codydegen" target="_blank id="git">
+      <img class="contact" src="https://img.icons8.com/ios-filled/50/000000/github.png"><span class="contact-text">codydegen</span></a>
+    </div>
+
+    <div id="git-info">
+      <a href="mailto:codydegen+dev@gmail.com" id="gmail">
+        <img class="contact" src="https://img.icons8.com/plasticine/100/000000/gmail.png"><span class="contact-text">codydegen+dev@gmail.com</span></a>
+      </div>
+  </div>
+</footer>
 
 <!-- Scripts -->
   <script src="board.js"></script>

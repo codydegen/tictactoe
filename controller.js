@@ -1,3 +1,6 @@
+// set up event listener for human versus computer toggle
+
+
 // create a display controller using a module
 const displayController = (() => {
   let _allowMoves = true;
@@ -26,7 +29,7 @@ const displayController = (() => {
   const getMovesAllowed = () => {
     return _allowMoves;
   }
-  // set up button
+  // set up reset button
   const resetButton = document.getElementById('reset-board');
   resetButton.addEventListener('click', startNewGame);
   // some functions
@@ -43,7 +46,7 @@ const displayController = (() => {
 // write a JavaScript function that will render the contents of 
 // the gameboard array to the webpage
 function renderArray(){
-  const container = document.getElementById('boardContainer');
+  const container = document.getElementById('board-container');
   for (let i = 0; i < 3; i++){
     for (let j = 0; j < 3; j++){
 
@@ -56,6 +59,7 @@ function renderArray(){
     }
   }
   const boxes = document.querySelectorAll('.box');
+  console.log(boxes);
   boxes.forEach((item) => item.addEventListener('click', placeHolderFunction));
 }
 
@@ -100,3 +104,33 @@ function clickBox(e) {
 // create an AI
 
 //let gameboard = [];
+const playerOneToggle = document.querySelector('#human-computer-toggle-one').childNodes;
+playerOneToggle.forEach((item) => item.addEventListener('click', function(){
+  //console.log('forEach'+item+one);
+  toggleUser(item, 'one')}));
+
+const playerTwoToggle = document.querySelector('#human-computer-toggle-two').childNodes;
+playerTwoToggle.forEach((item) => item.addEventListener('click', function(){
+  //console.log('forEach'+item+one);
+  toggleUser(item, 'two')}));
+
+function toggleUser(e, set) {
+  //console.log(set);
+  const human = document.querySelector('#human-'+set);
+  const computer = document.querySelector('#computer-'+set);
+  const clicked = e;
+  
+  //console.log(clicked);
+  if (clicked === human) {
+    human.classList.add('active');
+    computer.classList.remove('active');
+  } else if (clicked === computer){
+    computer.classList.add('active');
+    human.classList.remove('active');
+  } else {
+    console.log(`error, ${e} is the selected element`);
+    //alert('error');
+  }
+  
+
+};
