@@ -1,14 +1,18 @@
 // create a player using a factory
 
-const Player = (name, icon) => {
-  const checkName = () => name;
-  const rename = newName => name = newName;
-  const checkIcon = () => icon;
+const Player = (name, icon, human) => {
+  const getName = () => name;
+  const setName = newName => name = newName;
+  const getIcon = () => icon;
+  const getHuman = () => human;
+  const setHuman = newHuman => human = newHuman;
 
   return {
-    checkName,
-    rename,
-    checkIcon,
+    getName,
+    setName,
+    getIcon,
+    getHuman,
+    setHuman,
   }
 };
 

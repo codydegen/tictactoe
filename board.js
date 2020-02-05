@@ -10,8 +10,18 @@ const gameboard = (() => {
     const x = coords.charAt(1);
     const y = coords.charAt(3);
     _boardStatus[x][y] = icon;
-  }
+  };
 
+  const getValidMoves = () => {
+    const boxes = document.querySelectorAll('.box');
+    let validMoves = [];
+    boxes.forEach((item) => {
+      if (item.getAttribute('data-contents') === 'empty') {
+        validMoves.push(item.classList[1]);
+      }
+    });
+    return validMoves;
+  };
 
   const printBoardStatus = () => console.dir(_boardStatus);
   const addIcon = (icon, loc) => console.log('b');
@@ -83,6 +93,7 @@ const gameboard = (() => {
     updateBoard,
     printBoardStatus,
     addIcon,
+    getValidMoves,
     checkWin,
     resetBoard,
     // those public functions again

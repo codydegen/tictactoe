@@ -1,12 +1,13 @@
-let playerOne = Player('bob', 'x');
-let playerTwo = Player('fred', 'o');
+let playerOne = Player('bob', 'x', true);
+let playerTwo = Player('fred', 'o', true);
 
-playerOne.rename('john');
-console.log(playerOne.checkName());
+playerOne.setName('john');
+console.log(playerOne.getName());
 gameboard.printBoardStatus();
 displayController.setCurrentPlayer(playerOne, playerTwo);
 // write a JavaScript function that will render the contents of 
 // the gameboard array to the webpage
+
 renderArray();
 
 // allow players to add marks to a specific spot on the game board and 

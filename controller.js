@@ -23,12 +23,26 @@ const displayController = (() => {
     _currentPlayer = _currentPlayer === playerOne ? _playerTwo : _playerOne;
   };
 
-  const setMovesAllowed = status => {
+  const setGameInProgress = status => {
     _allowMoves = status;
   }
-  const getMovesAllowed = () => {
+  const getGameInProgress = () => {
     return _allowMoves;
   }
+
+  const makeAIMove = () => {
+    displayController.setGameInProgress(false);
+    setTimeout(function() {
+      const validMoves = gameboard.getValidMoves();
+      const randomValue = Math.floor(Math.random()*validMoves.length);
+      console.log(validMoves[randomValue]);
+      
+      const box = document.querySelector('.'+validMoves[randomValue]);
+      console.log(box);
+      displayController.setGameInProgress(true);
+      makeMove(box);
+    },1000)
+  };
   // set up reset button
   const resetButton = document.getElementById('reset-board');
   resetButton.addEventListener('click', startNewGame);
@@ -39,8 +53,9 @@ const displayController = (() => {
     getCurrentPlayer,
     setCurrentPlayer,
     swapCurrentPlayer,
-    setMovesAllowed,
-    getMovesAllowed,
+    setGameInProgress,
+    getGameInProgress,
+    makeAIMove,
   };
 })();
 // write a JavaScript function that will render the contents of 
@@ -60,39 +75,44 @@ function renderArray(){
   }
   const boxes = document.querySelectorAll('.box');
   console.log(boxes);
-  boxes.forEach((item) => item.addEventListener('click', placeHolderFunction));
+  boxes.forEach((item) => item.addEventListener('click', makeHumanMove));
 }
 
-function placeHolderFunction(e){
-  //console.log(e);
+function makeHumanMove(e){
+  console.log(e);
   const box = e.target;
-  const coords = box.classList[1];
-  const selectedBox = document.querySelector('.'+coords);
-  const contents = box.getAttribute('data-contents');
-  const currentPlayer = displayController.getCurrentPlayer();
-  if (contents === 'empty' && displayController.getMovesAllowed()) {
-    selectedBox.setAttribute('data-contents', currentPlayer.checkIcon());
-    selectedBox.innerText = currentPlayer.checkIcon();
-    gameboard.updateBoard(coords, currentPlayer.checkIcon());
-    gameboard.printBoardStatus();
-    displayController.swapCurrentPlayer();
-    let winner = gameboard.checkWin();
-    if(winner !== false) {
-      displayController.setMovesAllowed(false);
-      alert(winner+' wins!');
-    }
-  }
+  console.log(box);
+  makeMove(box);
+  
   //console.log(contents);
 
 }
 
-function clickBox(e) {
-  //check if box is empty
+function makeMove(box) {
+  const coords = box.classList[1];
+  const selectedBox = document.querySelector('.'+coords);
+  const contents = box.getAttribute('data-contents');
+  const currentPlayer = displayController.getCurrentPlayer();
+  if (contents === 'empty' && displayController.getGameInProgress()) {
+    selectedBox.setAttribute('data-contents', currentPlayer.getIcon());
+    selectedBox.innerText = currentPlayer.getIcon();
+    gameboard.updateBoard(coords, currentPlayer.getIcon());
+    gameboard.printBoardStatus();
+    displayController.swapCurrentPlayer();
+    
+    let winner = gameboard.checkWin();
+    if(winner !== false) {
+      displayController.setGameInProgress(false);
+      alert(winner+' wins!');
+    } else if(!displayController.getCurrentPlayer().getHuman()) {
+      displayController.makeAIMove();
+    }
 
-  // if box is empty, Place a strike
+    
+  }
+}
 
-  // check if ended
-};
+
 
 // allow players to add marks to a specific spot on the game board and 
 // attach it to the DOM
@@ -107,30 +127,35 @@ function clickBox(e) {
 const playerOneToggle = document.querySelector('#human-computer-toggle-one').childNodes;
 playerOneToggle.forEach((item) => item.addEventListener('click', function(){
   //console.log('forEach'+item+one);
-  toggleUser(item, 'one')}));
+  toggleHuman(item, 'one')}));
 
 const playerTwoToggle = document.querySelector('#human-computer-toggle-two').childNodes;
 playerTwoToggle.forEach((item) => item.addEventListener('click', function(){
   //console.log('forEach'+item+one);
-  toggleUser(item, 'two')}));
+  toggleHuman(item, 'two')}));
 
-function toggleUser(e, set) {
+function toggleHuman(e, set) {
   //console.log(set);
   const human = document.querySelector('#human-'+set);
   const computer = document.querySelector('#computer-'+set);
   const clicked = e;
+  const player = set === 'one' ? playerOne : playerTwo;
   
   //console.log(clicked);
   if (clicked === human) {
     human.classList.add('active');
     computer.classList.remove('active');
+    player.setHuman(true);
   } else if (clicked === computer){
     computer.classList.add('active');
     human.classList.remove('active');
+    player.setHuman(false);
   } else {
     console.log(`error, ${e} is the selected element`);
     //alert('error');
   }
+  console.log(player.getName());
+  console.log(player.getHuman());
   
 
 };

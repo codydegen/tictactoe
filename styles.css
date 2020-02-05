@@ -86,7 +86,8 @@ header {
   border-radius: 2px;
   /* box-sizing: border-box; */
   margin: 0 auto;
-
+  /* debug */
+  /* display: none; */
 
 }
 
@@ -119,6 +120,13 @@ header {
   margin: 5px;
   display: inline-block;
   margin: 0 auto;
+  /* display: flex; */
+  justify-content: center;
+}
+
+ul {
+  display: inline-flex;
+  justify-content: center;
 }
 
 li {
@@ -139,10 +147,17 @@ li.active {
   font-weight: bold;
 }
 
+label {
+  text-align: center;
+}
+
 /* footer */
 
 footer {
+  position: fixed;
+  bottom: 0;
   background-color: var(--color3);
+  width: 100%;
 }
 
 .contact {
