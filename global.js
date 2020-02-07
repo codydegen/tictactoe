@@ -1,6 +1,6 @@
 let playerOne = Player('bob', 'x', true);
 let playerTwo = Player('fred', 'o', true);
-
+let gameboard = Board();
 playerOne.setName('john');
 console.log(playerOne.getName());
 gameboard.printBoardStatus();
@@ -9,7 +9,12 @@ displayController.setCurrentPlayer(playerOne, playerTwo);
 // the gameboard array to the webpage
 
 renderArray();
+let b = Board();
+let c = _.cloneDeep(gameboard);
 
+c.updateBoard('x2y2','o');
+console.log(c.getValidMoves());
+console.log(gameboard.getValidMoves());
 // allow players to add marks to a specific spot on the game board and 
 // attach it to the DOM
 

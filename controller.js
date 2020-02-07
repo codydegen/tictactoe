@@ -46,6 +46,15 @@ const displayController = (() => {
   // set up reset button
   const resetButton = document.getElementById('reset-board');
   resetButton.addEventListener('click', startNewGame);
+
+  const statusButton = document.getElementById('check-status');
+  statusButton.addEventListener('click', () => {
+    let isXPlayer = getCurrentPlayer().getIcon() === 'x';
+    let testBoard = Board(gameboard.getBoardState());
+    testBoard.resetInternalBoard();
+    console.log(gameboard.getValidMoves());
+    alert(minimax(testBoard,3,isXPlayer));
+  });
   // some functions
 
   return {

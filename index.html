@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/0.10.0/lodash.min.js"></script> -->
+
   <meta charset="UTF-8">
-  <title>CD Commit 5 Tic Tac Toe</title>
+  <title>CD Commit 6 Tic Tac Toe</title>
   <link  rel="stylesheet" href="styles.css">
   <!-- favicons -->
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -20,6 +22,8 @@
   <div id="board-container">
     <!-- Javascript-populated -->
   </div>
+  <button id="reset-board">Reset</button>
+  <button id="check-status">Check Status</button>
 
 <div id="controls-container">
   <div id="player-one-container" class="user-containers">
@@ -43,7 +47,7 @@
   </div>
   <br>
 </div>
-<button id="reset-board">Reset</button>
+
 
 
 <footer>
@@ -61,6 +65,9 @@
 </footer>
 
 <!-- Scripts -->
+  <script src="/node_modules/lodash/lodash.js">
+  const _ = require('lodash');
+  </script>
   <script src="board.js"></script>
   <script src="player.js"></script>
   <script src="controller.js"></script>

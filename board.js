@@ -1,10 +1,13 @@
-// create a game boardusing a module
+// create a game board using a factory
 
-const gameboard = (() => {
+const Board = (boardState) => {
   // some functions
-  const _boardStatus = [[0, 0, 0],
-                       [0, 0, 0],
-                       [0, 0, 0]];
+  let _boardStatus = boardState || [[0, 0, 0],
+                                      [0, 0, 0],
+                                      [0, 0, 0]];
+
+  const getBoardState = () => _boardStatus;
+  const setBoardState = boardState => _boardStatus = boardState;
 
   const updateBoard = (coords, icon) => {
     const x = coords.charAt(1);
@@ -13,15 +16,26 @@ const gameboard = (() => {
   };
 
   const getValidMoves = () => {
-    const boxes = document.querySelectorAll('.box');
+    // const boxes = document.querySelectorAll('.box');
+    // let validMoves = [];
+    // boxes.forEach((item) => {
+    //   if (item.getAttribute('data-contents') === 'empty') {
+    //     validMoves.push(item.classList[1]);
+    //   }
+    // });
+    // return validMoves;
     let validMoves = [];
-    boxes.forEach((item) => {
-      if (item.getAttribute('data-contents') === 'empty') {
-        validMoves.push(item.classList[1]);
+    for(let i = 0; i < 3; i++) {
+      for(let j = 0; j < 3; j++) {
+        if (_boardStatus[i][j] === 0) {
+          validMoves.push('x'+i+'y'+j);
+        }
       }
-    });
+    }
     return validMoves;
   };
+
+
 
   const printBoardStatus = () => console.dir(_boardStatus);
   const addIcon = (icon, loc) => console.log('b');
@@ -70,6 +84,14 @@ const gameboard = (() => {
     return false;
   }
 
+  const resetInternalBoard = () => {
+    for(let i = 0; i < 3; i++) {
+      for(let j = 0; j < 3; j++) {
+        _boardStatus[i][j] = 0;
+      }
+    }
+  };
+
   const resetBoard = () => {
     
     for(let i = 0; i < 3; i++) {
@@ -85,20 +107,20 @@ const gameboard = (() => {
     }
   }
 
-
-
-
   return {
     //boardStatus,
+    getBoardState,
+    setBoardState,
     updateBoard,
     printBoardStatus,
     addIcon,
     getValidMoves,
     checkWin,
+    resetInternalBoard,
     resetBoard,
     // those public functions again
   };
-})();
+};
 
 // allow players to add marks to a specific spot on the game board and 
 // attach it to the DOM
