@@ -102,8 +102,8 @@ header {
 
 }
 
-[data-contents="empty"] {
-  background-color: var(--color4);
+[data-contents="0"] {
+  background-color: var(--color5);
 }
 
 /* controls container */

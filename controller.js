@@ -2,15 +2,17 @@
 
 
 // create a display controller using a module
-const displayController = (() => {
+const displayController = ((activeBoard) => {
   let _allowMoves = true;
   let _playerOne = null;
   let _playerTwo = null;
   let _currentPlayer = null;
+  let _activeBoard = activeBoard;
   const startNewGame = () => {
     _currentPlayer = _playerOne;
     _allowMoves = true;
-    gameboard.resetBoard();
+    _activeBoard.resetBoard();
+    renderBoard();
   };
   const getCurrentPlayer = () => _currentPlayer;
   const setCurrentPlayer = (playerOne, playerTwo) => {
@@ -21,6 +23,21 @@ const displayController = (() => {
 
   const swapCurrentPlayer = () => {
     _currentPlayer = _currentPlayer === playerOne ? _playerTwo : _playerOne;
+  };
+
+  const getActiveBoard = () => _activeBoard;
+  const setActiveBoard = newBoard => _activeBoard = newBoard;
+  const renderBoard = () => {
+    let tempBoard = _activeBoard.getBoardState();
+    let coords;
+    for(let i = 0; i < 3; i++) {
+      for(let j = 0; j < 3; j++) {
+        coords = `x${i}y${j}`;
+        const selectedBox = document.querySelector(`.${coords}`);
+        selectedBox.setAttribute('data-contents', tempBoard[i][j]);
+        selectedBox.innerText = tempBoard[i][j];
+      }
+    }
   };
 
   const setGameInProgress = status => {
@@ -40,7 +57,7 @@ const displayController = (() => {
       const box = document.querySelector('.'+validMoves[randomValue]);
       console.log(box);
       displayController.setGameInProgress(true);
-      makeMove(box);
+      makeMove2(box);
     },1000)
   };
   // set up reset button
@@ -50,8 +67,8 @@ const displayController = (() => {
   const statusButton = document.getElementById('check-status');
   statusButton.addEventListener('click', () => {
     let isXPlayer = getCurrentPlayer().getIcon() === 'x';
-    let testBoard = Board(gameboard.getBoardState());
-    testBoard.resetInternalBoard();
+    let testBoard = Board2(gameboard.getBoardState());
+    testBoard.resetBoard();
     console.log(gameboard.getValidMoves());
     alert(minimax(testBoard,3,isXPlayer));
   });
@@ -61,9 +78,13 @@ const displayController = (() => {
     startNewGame,
     getCurrentPlayer,
     setCurrentPlayer,
+    getActiveBoard,
+    setActiveBoard,
+    renderBoard,
     swapCurrentPlayer,
     setGameInProgress,
     getGameInProgress,
+    makeHumanMove,
     makeAIMove,
   };
 })();
@@ -77,7 +98,7 @@ function renderArray(){
       let el = document.createElement('div');
       el.classList.add('box');
       el.classList.add('x'+i+'y'+j);
-      el.setAttribute('data-contents', 'empty');
+      el.setAttribute('data-contents', '0');
       // do some stuff
       container.appendChild(el);
     }
@@ -91,7 +112,7 @@ function makeHumanMove(e){
   console.log(e);
   const box = e.target;
   console.log(box);
-  makeMove(box);
+  makeMove2(box);
   
   //console.log(contents);
 
@@ -102,7 +123,7 @@ function makeMove(box) {
   const selectedBox = document.querySelector('.'+coords);
   const contents = box.getAttribute('data-contents');
   const currentPlayer = displayController.getCurrentPlayer();
-  if (contents === 'empty' && displayController.getGameInProgress()) {
+  if (contents === '0' && displayController.getGameInProgress()) {
     selectedBox.setAttribute('data-contents', currentPlayer.getIcon());
     selectedBox.innerText = currentPlayer.getIcon();
     gameboard.updateBoard(coords, currentPlayer.getIcon());
@@ -121,6 +142,25 @@ function makeMove(box) {
   }
 }
 
+function makeMove2(box) {
+  const coords = box.classList[1];
+  const x = coords.charAt(1);
+  const y = coords.charAt(3);
+  const currentPlayer = displayController.getCurrentPlayer();
+  const activeBoard = displayController.getActiveBoard().getBoardState();
+  if(activeBoard[x][y] === 0 & displayController.getGameInProgress()) {
+    displayController.getActiveBoard().updateBoard(coords, currentPlayer.getIcon());
+    displayController.swapCurrentPlayer();
+    displayController.renderBoard();
+    let winner = gameboard.checkWin();
+    if(winner !== false) {
+      displayController.setGameInProgress(false);
+      alert(winner+ ' wins!');
+    } else if(!displayController.getCurrentPlayer().getHuman()) {
+      displayController.makeAIMove();
+    }
+  }
+}
 
 
 // allow players to add marks to a specific spot on the game board and 
