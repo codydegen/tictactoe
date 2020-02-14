@@ -2,11 +2,12 @@
 
 
 // create a display controller using a module
-const displayController = ((activeBoard) => {
+const displayController = ((activeBoard, ties) => {
   let _allowMoves = true;
   let _playerOne = null;
   let _playerTwo = null;
   let _currentPlayer = null;
+  let _numTies = ties || 0;
   let _activeBoard = activeBoard;
   const startNewGame = () => {
     _currentPlayer = _playerOne;
@@ -35,7 +36,9 @@ const displayController = ((activeBoard) => {
         coords = `x${i}y${j}`;
         const selectedBox = document.querySelector(`.${coords}`);
         selectedBox.setAttribute('data-contents', tempBoard[i][j]);
-        selectedBox.innerText = tempBoard[i][j];
+        if(tempBoard[i][j] !== 0){
+          selectedBox.innerText = tempBoard[i][j];
+        }
       }
     }
   };
@@ -67,14 +70,13 @@ const displayController = ((activeBoard) => {
   const statusButton = document.getElementById('check-status');
   statusButton.addEventListener('click', () => {
     let isXPlayer = getCurrentPlayer().getIcon() === 'x';
-    let testBoard = Board2(gameboard.getBoardState());
+    let testBoard = Board(gameboard.getBoardState());
     //testBoard.resetBoard();
     //console.log(gameboard.getValidMoves());
     console.time('b');
     console.table(minimax(testBoard,100,isXPlayer,true));
     console.timeEnd('b');
   });
-  // some functions
 
   return {
     startNewGame,

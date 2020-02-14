@@ -1,44 +1,6 @@
 // create a game board using a factory
-class Board {
-  constructor(boardState) {
-    if(boardState === undefined){
-      this.boardState = [[0, 0, 0],
-                         [0, 0, 0],
-                         [0, 0, 0]];
-    } else {
-      this.boardState = JSON.parse(JSON.stringify(boardState));;
-    }
-  }
 
-  getBoardState() {
-    return this.boardState;
-  }
-
-  setBoardState( value ) {
-    this.boardState = value;
-  }
-
-  updateBoard(coords, icon) {
-    const x = coords.charAt(1);
-    const y = coords.charAt(3);
-    this.boardState[x][y] = icon;
-  }
-
-  resetBoard() {
-    // for(let i = 0; i < 3; i++) {
-    //   for(let j = 0; j < 3; j++) {
-    //     _boardState[i][j] = 0;
-    //   }
-    // }
-  _boardState = [[0, 0, 0],
-  [0, 0, 0],
-  [0, 0, 0]];
-  };
-
-}
-
-
-const Board2 = (boardInp) => {
+const Board = (boardInp) => {
   let _boardState;
   if(boardInp === undefined){
     _boardState = [[0, 0, 0],
@@ -48,9 +10,6 @@ const Board2 = (boardInp) => {
     _boardState = JSON.parse(JSON.stringify(boardInp));;
   }
   
-  // let _boardState = JSON.parse(JSON.stringify(boardInp)) || [[0, 0, 0],
-  // [0, 0, 0],
-  // [0, 0, 0]];
   const getBoardState = () => _boardState;
   const setBoardState = inp => _boardState = inp; 
   const updateBoard = (coords, icon) => {
@@ -79,6 +38,7 @@ const Board2 = (boardInp) => {
     return false;
     //check if a player has won
   };
+
   const _checkWinDiag = () => {
     const winningPlayer = _boardState[1][1];
     if(winningPlayer === 0) return false;
@@ -118,23 +78,13 @@ const Board2 = (boardInp) => {
   }
 
   const resetBoard = () => {
-    // for(let i = 0; i < 3; i++) {
-    //   for(let j = 0; j < 3; j++) {
-    //     _boardState[i][j] = 0;
-    //   }
-    // }
   _boardState = [[0, 0, 0],
   [0, 0, 0],
   [0, 0, 0]];
   };
 
   return {
-    // getName,
-    // setName,
-    // getIcon,
-    // getHuman,
-    // setHuman,
-    _boardState,
+    // _boardState,
     // boardState,
     getBoardState,
     setBoardState,

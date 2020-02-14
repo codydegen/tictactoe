@@ -21,7 +21,7 @@ function minimax(board, depth, maximizingPlayer, topLevel) {
     for (let  i=0; i<validMoves.length; i++){
       let move = {};
       move.index = validMoves[i];
-      let testBoard = Board2(board.getBoardState());
+      let testBoard = Board(board.getBoardState());
       currentPlayer = (validMoves.length) % 2 === 0 ? 'o' : 'x';
       testBoard.updateBoard(validMoves[i], currentPlayer);
       let result = minimax(testBoard, depth-1, false, false);
@@ -29,14 +29,13 @@ function minimax(board, depth, maximizingPlayer, topLevel) {
       //console.log(move);
       moves.push(move);
     }
-    //if(validMoves.length !== 0) moves.push(move);
   } else {
     let minEval = Infinity;
     // for each child
     for (let  i=0; i<validMoves.length; i++){
       let move = {};
       move.index = validMoves[i];
-      let testBoard = Board2(board.getBoardState());
+      let testBoard = Board(board.getBoardState());
       currentPlayer = (validMoves.length) % 2 === 0 ? 'o' : 'x';
       testBoard.updateBoard(validMoves[i], currentPlayer);
       
@@ -45,7 +44,6 @@ function minimax(board, depth, maximizingPlayer, topLevel) {
     //console.log(move);
     moves.push(move);
     }
-    //if(validMoves.length !== 0) moves.push(move);
   }
   //console.table(moves);
   let bestMove = {};
@@ -75,5 +73,3 @@ function minimax(board, depth, maximizingPlayer, topLevel) {
   return bestMove;
   }
 };
-
-// 

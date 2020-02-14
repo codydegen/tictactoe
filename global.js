@@ -1,9 +1,9 @@
 let playerOne = Player('bob', 'x', true);
 let playerTwo = Player('fred', 'o', true);
-let b = [[0, 0, 0],
-         [0, 0, 0],
-         [0, 0, 0]]
-let gameboard = Board2();
+// let b = [[0, 0, 0],
+        //  [0, 0, 0],
+        //  [0, 0, 0]]
+let gameboard = Board();
 displayController.setActiveBoard(gameboard);
 playerOne.setName('john');
 //console.log(playerOne.getName());
@@ -14,7 +14,7 @@ displayController.setCurrentPlayer(playerOne, playerTwo);
 // the gameboard array to the webpage
 
 renderArray();
-gameboard.setBoardState(b);
+// gameboard.setBoardState(b);
 displayController.renderBoard();
 // let b = Board();
 // let c = _.cloneDeep(gameboard);
@@ -23,13 +23,13 @@ displayController.renderBoard();
 // console.log(c.getValidMoves());
 
 
-// let c = Board2();
-// let d = Board2(c.getBoardState());
+// let c = Board();
+// let d = Board(c.getBoardState());
 // console.log(c.getBoardState());
 // console.log(d.getBoardState());
 // c.updateBoard('x2y2','x');
 // let e = c.boardState;
-// let f = Board2();
+// let f = Board();
 // f.setBoardState(e);
 // c.updateBoard('x2y2','y');
 // console.table(c._boardState);
