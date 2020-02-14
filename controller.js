@@ -68,9 +68,11 @@ const displayController = ((activeBoard) => {
   statusButton.addEventListener('click', () => {
     let isXPlayer = getCurrentPlayer().getIcon() === 'x';
     let testBoard = Board2(gameboard.getBoardState());
-    testBoard.resetBoard();
-    console.log(gameboard.getValidMoves());
-    alert(minimax(testBoard,3,isXPlayer));
+    //testBoard.resetBoard();
+    //console.log(gameboard.getValidMoves());
+    console.time('b');
+    console.table(minimax(testBoard,100,isXPlayer,true));
+    console.timeEnd('b');
   });
   // some functions
 

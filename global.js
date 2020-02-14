@@ -1,30 +1,65 @@
 let playerOne = Player('bob', 'x', true);
 let playerTwo = Player('fred', 'o', true);
+let b = [[0, 0, 0],
+         [0, 0, 0],
+         [0, 0, 0]]
 let gameboard = Board2();
 displayController.setActiveBoard(gameboard);
 playerOne.setName('john');
-console.log(playerOne.getName());
-console.log(gameboard.getBoardState());
+//console.log(playerOne.getName());
+//console.log(gameboard.getBoardState());
 displayController.setCurrentPlayer(playerOne, playerTwo);
+// displayController.swapCurrentPlayer();
 // write a JavaScript function that will render the contents of 
 // the gameboard array to the webpage
 
 renderArray();
-let b = Board();
+gameboard.setBoardState(b);
+displayController.renderBoard();
+// let b = Board();
 // let c = _.cloneDeep(gameboard);
 // c.setBoardState()
 // c.updateBoard('x2y2','o');
 // console.log(c.getValidMoves());
-let c = Board2();
-let d = Board2([2,3]);
-console.log(c.getBoardState());
-console.log(d.getBoardState());
-c.updateBoard('x2y2','x');
-let e = c.getBoardState();
-let f = Board2(e);
-f.resetBoard();
-console.table(c.getBoardState());
-console.table(f.getBoardState());
+
+
+// let c = Board2();
+// let d = Board2(c.getBoardState());
+// console.log(c.getBoardState());
+// console.log(d.getBoardState());
+// c.updateBoard('x2y2','x');
+// let e = c.boardState;
+// let f = Board2();
+// f.setBoardState(e);
+// c.updateBoard('x2y2','y');
+// console.table(c._boardState);
+// console.table(f._boardState);
+
+// f.resetBoard();
+// console.table(c._boardState);
+// console.table(f._boardState);
+
+// let h = Player('bob','x',true);
+// let g = Player('tim','q',true);
+// console.log(h.getName());
+// console.log(g.getName());
+// g.setName('bill');
+// console.log(h.getName());
+// console.log(g.getName());
+// let k = Player(h.getName(),'p',true);
+// k.setName('john');
+// console.log(k.getName());
+// console.log(h.getName());
+
+// let c = new Board();
+// console.log(c.boardState);
+// c.updateBoard('x0y0', 'x');
+// let d = new Board(c.getBoardState());
+// c.updateBoard('x2y2', 'y');
+// console.table(c.getBoardState());
+// console.table(d.getBoardState());
+
+
 // console.log(c.getBoardState());
 // console.log(d.getBoardState());
 // console.log(c.getValidMoves());

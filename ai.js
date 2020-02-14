@@ -1,40 +1,78 @@
 
-function minimax(board, depth, maximizingPlayer) {
+function minimax(board, depth, maximizingPlayer, topLevel) {
   if (depth === 0 || board.getValidMoves().length === 0 || board.checkWin() !== false) {
     if (board.checkWin() === false) {
-      return 0;
+      return {score: 0};
     } else if (board.checkWin() === 'x') {
-      return 10; 
+      return {score: 10}; 
     } else if (board.checkWin() === 'o') {
-      return -10;
+      return {score: -10};
     } else {
       alert('depth reached');
 
     }
   }
   const validMoves = board.getValidMoves();
+  let moves = []
+
   if (maximizingPlayer) {
     let maxEval = -Infinity;
     // for each child
     for (let  i=0; i<validMoves.length; i++){
-      let testBoard = Board(board.getBoardState());
-      currentPlayer = (validMoves.length+i) % 2 === 0 ? 'o' : 'x';
+      let move = {};
+      move.index = validMoves[i];
+      let testBoard = Board2(board.getBoardState());
+      currentPlayer = (validMoves.length) % 2 === 0 ? 'o' : 'x';
       testBoard.updateBoard(validMoves[i], currentPlayer);
-      let eval = minimax(testBoard, depth-1, false);
-      maxEval = Math.max(maxEval, eval);
+      let result = minimax(testBoard, depth-1, false, false);
+      move.score = Math.max(maxEval, result.score);
+      //console.log(move);
+      moves.push(move);
     }
-    return maxEval;
+    //if(validMoves.length !== 0) moves.push(move);
   } else {
     let minEval = Infinity;
     // for each child
     for (let  i=0; i<validMoves.length; i++){
-      let testBoard = Board(board.getBoardState());
-      currentPlayer = (validMoves.length+i) % 2 === 0 ? 'o' : 'x';
+      let move = {};
+      move.index = validMoves[i];
+      let testBoard = Board2(board.getBoardState());
+      currentPlayer = (validMoves.length) % 2 === 0 ? 'o' : 'x';
       testBoard.updateBoard(validMoves[i], currentPlayer);
-    let eval = minimax(testBoard, depth-1, true);
-    minEval = Math.min(minEval, eval);
+      
+    let result = minimax(testBoard, depth-1, true, false);
+    move.score = Math.min(minEval, result.score);
+    //console.log(move);
+    moves.push(move);
     }
-    return minEval;
+    //if(validMoves.length !== 0) moves.push(move);
+  }
+  //console.table(moves);
+  let bestMove = {};
+  if (maximizingPlayer) {
+    bestMove.score = -Infinity;
+    bestMove.index = '';
+    for(let  i=0; i<moves.length; i++) {
+      if(moves[i].score > bestMove.score){
+        bestMove.score = moves[i].score;
+        bestMove.index = moves[i].index;
+      }
+    }
+  } else {
+    bestMove.score = Infinity;
+    bestMove.index = '';
+    for(let  i=0; i<moves.length; i++) {
+      if(moves[i].score < bestMove.score){
+        bestMove.score = moves[i].score;
+        bestMove.index = moves[i].index;
+      }
+    }
+  }
+  if(topLevel) {
+    moves.unshift(bestMove);
+    return moves;
+  } else {
+  return bestMove;
   }
 };
 
