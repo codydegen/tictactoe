@@ -108,9 +108,16 @@ header {
 
 /* controls container */
 
-#controls-container {
+#controls-container, #score-container {
   display: flex;
   justify-content: center;
+}
+
+.score-block {
+  display: inline-block;
+  border: solid black thin;
+  margin: 10px;
+  text-align: center;
 }
 
 .user-containers {

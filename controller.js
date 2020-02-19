@@ -56,11 +56,12 @@ const displayController = ((activeBoard, ties) => {
       const validMoves = gameboard.getValidMoves();
       const randomValue = Math.floor(Math.random()*validMoves.length);
       console.log(validMoves[randomValue]);
-      
+      const bestMove = minimax(gameboard, 1000, false, true)[0];
       const box = document.querySelector('.'+validMoves[randomValue]);
+      const smartBox = document.querySelector('.'+bestMove.index);
       console.log(box);
       displayController.setGameInProgress(true);
-      makeMove2(box);
+      makeMove2(smartBox);
     },1000)
   };
   // set up reset button
@@ -78,6 +79,128 @@ const displayController = ((activeBoard, ties) => {
     console.timeEnd('b');
   });
 
+  //const 
+
+  const updateScore = winner => {
+    let scoreBlock;
+    if (winner === _playerOne) {
+      scoreBlock = document.getElementById('player-one-score');
+      console.log('player one');
+    } else if (winner === _playerTwo) {
+      scoreBlock = document.getElementById('player-two-score');
+      console.log('player two');
+    } else {
+      scoreBlock = document.getElementById('tie-score');
+      console.log(winner);
+    }
+    scoreBlock.innerText = winner.getScore();
+    const element = 0;
+  }
+
+  const isObject = a => a != null && a.constructor === Object;
+
+
+  const _createScoreBlock = (player) => {
+    let element = document.createElement('div');
+    let nameElement = document.createElement('div');
+    let scoreElement = document.createElement('div');
+    let nameElementId;
+    let scoreElementId;
+    let elementId;
+    let name;
+    let score;
+    if (isObject(player)) {
+      if (player.getIcon() === 'x') {
+        elementId = 'player-one-scorebug';
+        nameElementId = 'player-one-name';
+        scoreElementId = 'player-one-score';
+      } else {
+        elementId = 'player-two-scorebug';
+        nameElementId = 'player-two-name';
+        scoreElementId = 'player-two-score';
+      }
+      score = player.getScore();
+      name = player.getHuman() ? player.getName() : 'AI';
+      nameElement.innerText = `${name}\'s score:`;
+    } else {
+      elementId = 'tie-score';
+      name = 'Ties';
+      nameElement.innerText = `${name}:`;
+      score = 0;
+    }
+    element.setAttribute('id', elementId);
+    nameElement.setAttribute('id', nameElementId);
+    scoreElement.setAttribute('id', scoreElementId);
+    element.setAttribute('class', 'score-block');
+
+    scoreElement.innerText = score;
+    element.appendChild(nameElement);
+    element.appendChild(scoreElement);
+    return element;
+  }
+
+  const render = () => {
+    const container = document.getElementById('board-container');
+    const scoreBug = document.getElementById('score-container');
+    // scoreBug.appendChild(_createScoreBlock('player-one-score'));
+    scoreBug.appendChild(_createScoreBlock(_playerOne));
+    scoreBug.appendChild(_createScoreBlock('tie-score'));
+    scoreBug.appendChild(_createScoreBlock(_playerTwo));
+
+    for (let i = 0; i < 3; i++){
+      for (let j = 0; j < 3; j++){
+  
+        let el = document.createElement('div');
+        el.classList.add('box');
+        el.classList.add('x'+i+'y'+j);
+        el.setAttribute('data-contents', '0');
+        // do some stuff
+        container.appendChild(el);
+      }
+    }
+    const boxes = document.querySelectorAll('.box');
+    console.log(boxes);
+    boxes.forEach((item) => item.addEventListener('click', makeHumanMove));
+
+  }
+
+  const makeHumanMove = e => {
+    console.log(e);
+    const box = e.target;
+    console.log(box);
+    makeMove2(box);
+    
+    //console.log(contents);
+  
+  }
+
+  const makeMove2 = box => {
+    const coords = box.classList[1];
+    const x = coords.charAt(1);
+    const y = coords.charAt(3);
+    const currentPlayer = displayController.getCurrentPlayer();
+    const activeBoard = displayController.getActiveBoard().getBoardState();
+    if(activeBoard[x][y] === 0 & displayController.getGameInProgress()) {
+      displayController.getActiveBoard().updateBoard(coords, currentPlayer.getIcon());
+      displayController.swapCurrentPlayer();
+      displayController.renderBoard();
+      let winner = gameboard.checkWin();
+      if(winner !== false) {
+        if(winner === _playerOne.getIcon()) {
+          _playerOne.incrementScore();
+          updateScore(_playerOne);
+        } else {
+          _playerTwo.incrementScore();
+          updateScore(_playerTwo);
+        }
+        displayController.setGameInProgress(false);
+        alert(winner+ ' wins!');
+      } else if(!displayController.getCurrentPlayer().getHuman()) {
+        displayController.makeAIMove();
+      }
+    }
+  }
+
   return {
     startNewGame,
     getCurrentPlayer,
@@ -90,37 +213,15 @@ const displayController = ((activeBoard, ties) => {
     getGameInProgress,
     makeHumanMove,
     makeAIMove,
+    updateScore,
+    render,
   };
 })();
 // write a JavaScript function that will render the contents of 
 // the gameboard array to the webpage
-function renderArray(){
-  const container = document.getElementById('board-container');
-  for (let i = 0; i < 3; i++){
-    for (let j = 0; j < 3; j++){
 
-      let el = document.createElement('div');
-      el.classList.add('box');
-      el.classList.add('x'+i+'y'+j);
-      el.setAttribute('data-contents', '0');
-      // do some stuff
-      container.appendChild(el);
-    }
-  }
-  const boxes = document.querySelectorAll('.box');
-  console.log(boxes);
-  boxes.forEach((item) => item.addEventListener('click', makeHumanMove));
-}
 
-function makeHumanMove(e){
-  console.log(e);
-  const box = e.target;
-  console.log(box);
-  makeMove2(box);
-  
-  //console.log(contents);
 
-}
 
 function makeMove(box) {
   const coords = box.classList[1];
@@ -146,25 +247,7 @@ function makeMove(box) {
   }
 }
 
-function makeMove2(box) {
-  const coords = box.classList[1];
-  const x = coords.charAt(1);
-  const y = coords.charAt(3);
-  const currentPlayer = displayController.getCurrentPlayer();
-  const activeBoard = displayController.getActiveBoard().getBoardState();
-  if(activeBoard[x][y] === 0 & displayController.getGameInProgress()) {
-    displayController.getActiveBoard().updateBoard(coords, currentPlayer.getIcon());
-    displayController.swapCurrentPlayer();
-    displayController.renderBoard();
-    let winner = gameboard.checkWin();
-    if(winner !== false) {
-      displayController.setGameInProgress(false);
-      alert(winner+ ' wins!');
-    } else if(!displayController.getCurrentPlayer().getHuman()) {
-      displayController.makeAIMove();
-    }
-  }
-}
+//function 
 
 
 // allow players to add marks to a specific spot on the game board and 

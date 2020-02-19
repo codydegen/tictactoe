@@ -13,7 +13,7 @@ displayController.setCurrentPlayer(playerOne, playerTwo);
 // write a JavaScript function that will render the contents of 
 // the gameboard array to the webpage
 
-renderArray();
+displayController.render();
 // gameboard.setBoardState(b);
 displayController.renderBoard();
 // let b = Board();
