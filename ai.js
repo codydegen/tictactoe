@@ -1,19 +1,19 @@
-
 function minimax(board, depth, maximizingPlayer, topLevel) {
-  if (depth === 0 || board.getValidMoves().length === 0 || board.checkEnd() !== false) {
-    if (board.checkEnd()) {
+  let endState = board.checkEnd();
+  let vm = board.getValidMoves().length;
+  if (depth === 0 || vm === 0 || endState !== false) {
+    if (endState === 'tie') {
       return {score: 0};
-    } else if (board.checkEnd() === 'x') {
+    } else if (endState === 'x') {
       return {score: 10}; 
-    } else if (board.checkEnd() === 'o') {
+    } else if (endState === 'o') {
       return {score: -10};
     } else {
       alert('depth reached');
-
     }
   }
   const validMoves = board.getValidMoves();
-  let moves = []
+  let moves = [];
 
   if (maximizingPlayer) {
     let maxEval = -Infinity;
@@ -46,14 +46,19 @@ function minimax(board, depth, maximizingPlayer, topLevel) {
     }
   }
   //console.table(moves);
+  let bestMoveList = [];
   let bestMove = {};
   if (maximizingPlayer) {
     bestMove.score = -Infinity;
     bestMove.index = '';
     for(let  i=0; i<moves.length; i++) {
       if(moves[i].score > bestMove.score){
+        bestMoveList = [];
         bestMove.score = moves[i].score;
         bestMove.index = moves[i].index;
+        bestMoveList.push(bestMove);
+      } else if (moves[i].score === bestMove.score) {
+        bestMoveList.push(moves[i]);
       }
     }
   } else {
@@ -61,15 +66,21 @@ function minimax(board, depth, maximizingPlayer, topLevel) {
     bestMove.index = '';
     for(let  i=0; i<moves.length; i++) {
       if(moves[i].score < bestMove.score){
+        bestMoveList = [];
         bestMove.score = moves[i].score;
         bestMove.index = moves[i].index;
+        bestMoveList.push(bestMove);
+      } else if (moves[i].score === bestMove.score) {
+        bestMoveList.push(moves[i]);
       }
     }
   }
+  const randomBestMove = bestMoveList[Math.floor(Math.random()*bestMoveList.length)];
   if(topLevel) {
-    moves.unshift(bestMove);
+    console.log(bestMoveList);
+    moves.unshift(randomBestMove);
     return moves;
   } else {
-  return bestMove;
+  return randomBestMove;
   }
 };

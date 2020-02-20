@@ -15,6 +15,9 @@ const displayController = ((activeBoard, ties) => {
     _allowMoves = true;
     _activeBoard.resetBoard();
     renderBoard();
+    if (!_currentPlayer.getHuman()) {
+      makeAIMove();
+    }
   };
   const getCurrentPlayer = () => _currentPlayer;
   const setCurrentPlayer = (playerOne, playerTwo) => {
@@ -58,14 +61,16 @@ const displayController = ((activeBoard, ties) => {
     setTimeout(function() {
       const validMoves = gameboard.getValidMoves();
       const randomValue = Math.floor(Math.random()*validMoves.length);
-      console.log(validMoves[randomValue]);
+      //console.log(validMoves[randomValue]);
       let isXPlayer = getCurrentPlayer().getIcon() === 'x';
-      const bestMove = minimax(gameboard, 1000, isXPlayer, true)[0];
+      const moveList = minimax(gameboard, 1000, isXPlayer, true);
+      console.table(moveList);
+      const bestMove = moveList[0];
       const box = document.querySelector('.'+validMoves[randomValue]);
       const smartBox = document.querySelector('.'+bestMove.index);
       console.log(box);
       displayController.setGameInProgress(true);
-      makeMove2(smartBox);
+      MakeMove(smartBox);
     },500)
   };
   // set up reset button
@@ -99,7 +104,7 @@ const displayController = ((activeBoard, ties) => {
     } else if (winner === _playerTwo) {
       scoreBlock = document.getElementById('player-two-score');
       console.log('player two');
-    } else 
+    }
     score = winner.getScore();
   }
   scoreBlock.innerText = score;
@@ -178,13 +183,13 @@ const displayController = ((activeBoard, ties) => {
     console.log(e);
     const box = e.target;
     console.log(box);
-    makeMove2(box);
+    MakeMove(box);
     
     //console.log(contents);
   
   }
 
-  const makeMove2 = box => {
+  const MakeMove = box => {
     const coords = box.classList[1];
     const x = coords.charAt(1);
     const y = coords.charAt(3);
