@@ -31,10 +31,11 @@ const Board = (boardInp) => {
     return validMoves;
   };
 
-  const checkWin = () => {
+  const checkEnd = () => {
     if(_checkWinDiag() !== false) return _checkWinDiag();
     if(_checkWinHoriz() !== false ) return _checkWinHoriz();
     if(_checkWinVert() !== false) return _checkWinVert();
+    if(_checkTie() !== false) return _checkTie();
     return false;
     //check if a player has won
   };
@@ -77,6 +78,10 @@ const Board = (boardInp) => {
     return false;
   }
 
+  const _checkTie = () => {
+    return getValidMoves().length === 0 ? 'tie' : false;
+  }
+
   const resetBoard = () => {
   _boardState = [[0, 0, 0],
   [0, 0, 0],
@@ -90,7 +95,7 @@ const Board = (boardInp) => {
     setBoardState,
     updateBoard,
     getValidMoves,
-    checkWin,
+    checkEnd,
     resetBoard,
 
   }

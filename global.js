@@ -1,11 +1,11 @@
-let playerOne = Player('bob', 'x', true);
-let playerTwo = Player('fred', 'o', true);
+let playerOne = Player('Bob', 'x', true);
+let playerTwo = Player('Fred', 'o', true);
 // let b = [[0, 0, 0],
         //  [0, 0, 0],
         //  [0, 0, 0]]
 let gameboard = Board();
 displayController.setActiveBoard(gameboard);
-playerOne.setName('john');
+// playerOne.setName('john');
 //console.log(playerOne.getName());
 //console.log(gameboard.getBoardState());
 displayController.setCurrentPlayer(playerOne, playerTwo);

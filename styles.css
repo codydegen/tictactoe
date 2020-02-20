@@ -118,6 +118,7 @@ header {
   border: solid black thin;
   margin: 10px;
   text-align: center;
+  width: 150px;
 }
 
 .user-containers {

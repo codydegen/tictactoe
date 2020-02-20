@@ -9,6 +9,7 @@ const displayController = ((activeBoard, ties) => {
   let _currentPlayer = null;
   let _numTies = ties || 0;
   let _activeBoard = activeBoard;
+
   const startNewGame = () => {
     _currentPlayer = _playerOne;
     _allowMoves = true;
@@ -38,6 +39,8 @@ const displayController = ((activeBoard, ties) => {
         selectedBox.setAttribute('data-contents', tempBoard[i][j]);
         if(tempBoard[i][j] !== 0){
           selectedBox.innerText = tempBoard[i][j];
+        } else {
+          selectedBox.innerText = '';
         }
       }
     }
@@ -56,13 +59,14 @@ const displayController = ((activeBoard, ties) => {
       const validMoves = gameboard.getValidMoves();
       const randomValue = Math.floor(Math.random()*validMoves.length);
       console.log(validMoves[randomValue]);
-      const bestMove = minimax(gameboard, 1000, false, true)[0];
+      let isXPlayer = getCurrentPlayer().getIcon() === 'x';
+      const bestMove = minimax(gameboard, 1000, isXPlayer, true)[0];
       const box = document.querySelector('.'+validMoves[randomValue]);
       const smartBox = document.querySelector('.'+bestMove.index);
       console.log(box);
       displayController.setGameInProgress(true);
       makeMove2(smartBox);
-    },1000)
+    },500)
   };
   // set up reset button
   const resetButton = document.getElementById('reset-board');
@@ -83,19 +87,23 @@ const displayController = ((activeBoard, ties) => {
 
   const updateScore = winner => {
     let scoreBlock;
+    let score;
+    if (winner === 'tie') {
+        scoreBlock = document.getElementById('tie-score');
+        console.log(winner);
+        score = _numTies;
+    } else {
     if (winner === _playerOne) {
       scoreBlock = document.getElementById('player-one-score');
       console.log('player one');
     } else if (winner === _playerTwo) {
       scoreBlock = document.getElementById('player-two-score');
       console.log('player two');
-    } else {
-      scoreBlock = document.getElementById('tie-score');
-      console.log(winner);
-    }
-    scoreBlock.innerText = winner.getScore();
-    const element = 0;
+    } else 
+    score = winner.getScore();
   }
+  scoreBlock.innerText = score;
+}
 
   const isObject = a => a != null && a.constructor === Object;
 
@@ -123,7 +131,9 @@ const displayController = ((activeBoard, ties) => {
       name = player.getHuman() ? player.getName() : 'AI';
       nameElement.innerText = `${name}\'s score:`;
     } else {
-      elementId = 'tie-score';
+      elementId = 'tie-scorebug';
+      nameElementId = 'tie-name';
+        scoreElementId = 'tie-score';
       name = 'Ties';
       nameElement.innerText = `${name}:`;
       score = 0;
@@ -184,8 +194,13 @@ const displayController = ((activeBoard, ties) => {
       displayController.getActiveBoard().updateBoard(coords, currentPlayer.getIcon());
       displayController.swapCurrentPlayer();
       displayController.renderBoard();
-      let winner = gameboard.checkWin();
+      let winner = gameboard.checkEnd();
       if(winner !== false) {
+        if (winner === 'tie') {
+          _numTies++;
+          updateScore('tie');
+          alert('you tied.');
+        } else {
         if(winner === _playerOne.getIcon()) {
           _playerOne.incrementScore();
           updateScore(_playerOne);
@@ -193,8 +208,10 @@ const displayController = ((activeBoard, ties) => {
           _playerTwo.incrementScore();
           updateScore(_playerTwo);
         }
-        displayController.setGameInProgress(false);
         alert(winner+ ' wins!');
+      }
+        displayController.setGameInProgress(false);
+        
       } else if(!displayController.getCurrentPlayer().getHuman()) {
         displayController.makeAIMove();
       }
@@ -223,29 +240,29 @@ const displayController = ((activeBoard, ties) => {
 
 
 
-function makeMove(box) {
-  const coords = box.classList[1];
-  const selectedBox = document.querySelector('.'+coords);
-  const contents = box.getAttribute('data-contents');
-  const currentPlayer = displayController.getCurrentPlayer();
-  if (contents === '0' && displayController.getGameInProgress()) {
-    selectedBox.setAttribute('data-contents', currentPlayer.getIcon());
-    selectedBox.innerText = currentPlayer.getIcon();
-    gameboard.updateBoard(coords, currentPlayer.getIcon());
-    gameboard.printBoardStatus();
-    displayController.swapCurrentPlayer();
+// function makeMove(box) {
+//   const coords = box.classList[1];
+//   const selectedBox = document.querySelector('.'+coords);
+//   const contents = box.getAttribute('data-contents');
+//   const currentPlayer = displayController.getCurrentPlayer();
+//   if (contents === '0' && displayController.getGameInProgress()) {
+//     selectedBox.setAttribute('data-contents', currentPlayer.getIcon());
+//     selectedBox.innerText = currentPlayer.getIcon();
+//     gameboard.updateBoard(coords, currentPlayer.getIcon());
+//     gameboard.printBoardStatus();
+//     displayController.swapCurrentPlayer();
     
-    let winner = gameboard.checkWin();
-    if(winner !== false) {
-      displayController.setGameInProgress(false);
-      alert(winner+' wins!');
-    } else if(!displayController.getCurrentPlayer().getHuman()) {
-      displayController.makeAIMove();
-    }
+//     let winner = gameboard.checkWin();
+//     if(winner !== false) {
+//       displayController.setGameInProgress(false);
+//       alert(winner+' wins!');
+//     } else if(!displayController.getCurrentPlayer().getHuman()) {
+//       displayController.makeAIMove();
+//     }
 
     
-  }
-}
+//   }
+// }
 
 //function 
 

@@ -1,11 +1,11 @@
 
 function minimax(board, depth, maximizingPlayer, topLevel) {
-  if (depth === 0 || board.getValidMoves().length === 0 || board.checkWin() !== false) {
-    if (board.checkWin() === false) {
+  if (depth === 0 || board.getValidMoves().length === 0 || board.checkEnd() !== false) {
+    if (board.checkEnd()) {
       return {score: 0};
-    } else if (board.checkWin() === 'x') {
+    } else if (board.checkEnd() === 'x') {
       return {score: 10}; 
-    } else if (board.checkWin() === 'o') {
+    } else if (board.checkEnd() === 'o') {
       return {score: -10};
     } else {
       alert('depth reached');
