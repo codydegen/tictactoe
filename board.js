@@ -1,5 +1,4 @@
 // create a game board using a factory
-
 const Board = (boardInp) => {
   let _boardState;
   if(boardInp === undefined){
@@ -89,8 +88,6 @@ const Board = (boardInp) => {
   };
 
   return {
-    // _boardState,
-    // boardState,
     getBoardState,
     setBoardState,
     updateBoard,

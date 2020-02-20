@@ -64,11 +64,11 @@ const displayController = ((activeBoard, ties) => {
       //console.log(validMoves[randomValue]);
       let isXPlayer = getCurrentPlayer().getIcon() === 'x';
       const moveList = minimax(gameboard, 1000, isXPlayer, true);
-      console.table(moveList);
+      //console.table(moveList);
       const bestMove = moveList[0];
       const box = document.querySelector('.'+validMoves[randomValue]);
       const smartBox = document.querySelector('.'+bestMove.index);
-      console.log(box);
+      //console.log(box);
       displayController.setGameInProgress(true);
       MakeMove(smartBox);
     },500)
@@ -84,7 +84,7 @@ const displayController = ((activeBoard, ties) => {
     //testBoard.resetBoard();
     //console.log(gameboard.getValidMoves());
     console.time('b');
-    console.table(minimax(testBoard,100,isXPlayer,true));
+    //console.table(minimax(testBoard,100,isXPlayer,true));
     console.timeEnd('b');
   });
 
@@ -95,15 +95,15 @@ const displayController = ((activeBoard, ties) => {
     let score;
     if (winner === 'tie') {
         scoreBlock = document.getElementById('tie-score');
-        console.log(winner);
+        //console.log(winner);
         score = _numTies;
     } else {
     if (winner === _playerOne) {
       scoreBlock = document.getElementById('player-one-score');
-      console.log('player one');
+      //console.log('player one');
     } else if (winner === _playerTwo) {
       scoreBlock = document.getElementById('player-two-score');
-      console.log('player two');
+      //console.log('player two');
     }
     score = winner.getScore();
   }
@@ -174,19 +174,16 @@ const displayController = ((activeBoard, ties) => {
       }
     }
     const boxes = document.querySelectorAll('.box');
-    console.log(boxes);
+    //console.log(boxes);
     boxes.forEach((item) => item.addEventListener('click', makeHumanMove));
 
   }
 
   const makeHumanMove = e => {
-    console.log(e);
+    //console.log(e);
     const box = e.target;
-    console.log(box);
-    MakeMove(box);
-    
-    //console.log(contents);
-  
+    //console.log(box);
+    MakeMove(box);  
   }
 
   const MakeMove = box => {
@@ -245,61 +242,21 @@ const displayController = ((activeBoard, ties) => {
 
 
 
-// function makeMove(box) {
-//   const coords = box.classList[1];
-//   const selectedBox = document.querySelector('.'+coords);
-//   const contents = box.getAttribute('data-contents');
-//   const currentPlayer = displayController.getCurrentPlayer();
-//   if (contents === '0' && displayController.getGameInProgress()) {
-//     selectedBox.setAttribute('data-contents', currentPlayer.getIcon());
-//     selectedBox.innerText = currentPlayer.getIcon();
-//     gameboard.updateBoard(coords, currentPlayer.getIcon());
-//     gameboard.printBoardStatus();
-//     displayController.swapCurrentPlayer();
-    
-//     let winner = gameboard.checkWin();
-//     if(winner !== false) {
-//       displayController.setGameInProgress(false);
-//       alert(winner+' wins!');
-//     } else if(!displayController.getCurrentPlayer().getHuman()) {
-//       displayController.makeAIMove();
-//     }
 
-    
-//   }
-// }
-
-//function 
-
-
-// allow players to add marks to a specific spot on the game board and 
-// attach it to the DOM
-
-// check if the game is over
-
-// and the ability to put in names including a button to start or restart the game
-
-// create an AI
-
-//let gameboard = [];
 const playerOneToggle = document.querySelector('#human-computer-toggle-one').childNodes;
 playerOneToggle.forEach((item) => item.addEventListener('click', function(){
-  //console.log('forEach'+item+one);
   toggleHuman(item, 'one')}));
 
 const playerTwoToggle = document.querySelector('#human-computer-toggle-two').childNodes;
 playerTwoToggle.forEach((item) => item.addEventListener('click', function(){
-  //console.log('forEach'+item+one);
   toggleHuman(item, 'two')}));
 
 function toggleHuman(e, set) {
-  //console.log(set);
   const human = document.querySelector('#human-'+set);
   const computer = document.querySelector('#computer-'+set);
   const clicked = e;
   const player = set === 'one' ? playerOne : playerTwo;
-  
-  //console.log(clicked);
+
   if (clicked === human) {
     human.classList.add('active');
     computer.classList.remove('active');
@@ -310,10 +267,5 @@ function toggleHuman(e, set) {
     player.setHuman(false);
   } else {
     console.log(`error, ${e} is the selected element`);
-    //alert('error');
   }
-  console.log(player.getName());
-  console.log(player.getHuman());
-  
-
 };
