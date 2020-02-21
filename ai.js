@@ -5,9 +5,9 @@ function minimax(board, depth, maximizingPlayer, topLevel) {
     if (endState === 'tie') {
       return {score: 0};
     } else if (endState === 'x') {
-      return {score: 10}; 
+      return {score: 1000-depth}; 
     } else if (endState === 'o') {
-      return {score: -10};
+      return {score: -1000+depth};
     } else {
       alert('depth reached');
     }

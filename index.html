@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/0.10.0/lodash.min.js"></script> -->
-
   <meta charset="UTF-8">
-  <title>CD Commit 14 Tic Tac Toe</title>
+  <title>CD Commit 15 Tic Tac Toe</title>
   <link  rel="stylesheet" href="styles.css">
   <!-- favicons -->
   <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
@@ -24,23 +22,32 @@
 
   <div id="controls-container" class="display-grid">
     <div id="player-one-container" class="user-containers">
+      <label for="player-one-input">Player One Name</label>
+      <input type="text" name="player-one" id="player-one-input">
       <ul id="human-computer-toggle-one">
         <li id="human-one" class="active">Human</li>
         <li id="computer-one" >Computer</li>
       </ul>
+      <ul id="computer-difficulty-one" class="hide first-trans">
+        <li id="computer-easy-one" class="active">Easy</li>
+        <li id="computer-hard-one" >Hard</li>
+      </ul>
       <br>
       <br>
-      <label for="player-one-input">Player One Name</label>
-      <input type="text" name="player-one" id="player-one-input">
+
     </div>
   
     <div id="player-two-container" class="user-containers">
+      <label for="player-two-input">Player Two Name</label>
+      <input type="text" name="player-two" id="player-two-input">
       <ul id="human-computer-toggle-two">
         <li id="human-two" class="active">Human</li>
         <li id="computer-two" >Computer</li>
       </ul>
-      <label for="player-two-input">Player Two Name</label>
-      <input type="text" name="player-two" id="player-two-input">
+      <ul id="computer-difficulty-two" class="hide first-trans">
+        <li id="computer-easy-two" class="active">Easy</li>
+        <li id="computer-hard-two" >Hard</li>
+      </ul>
     </div>
     <button id="start-game">Start Game</button>
     <!-- <div id="test"></div> -->
@@ -55,21 +62,15 @@
   </div>
   <button id="reset-board">Reset</button>
   <button id="main-menu">Return to Main Menu</button>
-  <button id="check-status">Check Status</button>
+  <button id="scoring-status">Scoring Status</button>
+  <!-- to-do: add scoring for different squares -->
 </div>
-
-
-
-
-
-
 <footer>
   <a id="contact-info">
     <div id="git-info">
     <a href="https://github.com/codydegen" target="_blank id="git">
       <img class="contact" src="https://img.icons8.com/ios-filled/50/000000/github.png"><span class="contact-text">codydegen</span></a>
     </div>
-
     <div id="git-info">
       <a href="mailto:codydegen+dev@gmail.com" id="gmail">
         <img class="contact" src="https://img.icons8.com/plasticine/100/000000/gmail.png"><span class="contact-text">codydegen+dev@gmail.com</span></a>

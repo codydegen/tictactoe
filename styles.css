@@ -154,6 +154,7 @@ header {
 }
 
 .user-containers {
+  padding: 10px;
   background-color: burlywood;
   /* height: 8em; */
   /* width: 20em; */
@@ -190,6 +191,47 @@ li.active {
   transition: 0.3s;
   font-weight: bold;
 }
+
+.trans {
+  /* transition: 1.3s; */
+  opacity: 0;
+  animation: fadeIn 0.9s 1;
+  animation-fill-mode: forwards;
+}
+
+.hide :not(.first-trans) {
+  /* opacity: 0; */
+  animation: fadeOut 0.9s 1;
+  animation-fill-mode: forwards;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0.0;
+  }
+  100% {
+    opacity: 1.0;
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1.0;
+  }
+  100% {
+    opacity: 0.0;
+  }
+}
+
+.first-trans {
+  opacity: 0;
+  transition-duration: 0s;
+}
+
+/* .trans > ul {
+  transition: 1.3s;
+  height: 50px;
+} */
 
 label {
   text-align: center;

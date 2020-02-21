@@ -23,19 +23,15 @@ const displayController = ((activeBoard, ties) => {
   const startNewGame = () => {
     document.getElementById('game-container').classList.remove('hidden');
     document.getElementById('controls-container').classList.add('hidden');
-    //_playerOne.setName(document.getElementById('player-one-input').textContent);
-    //_playerTwo.setName(document.getElementById('player-two-input').textContent);
     _renderNewPlayer(_playerOne);
     _renderNewPlayer(_playerTwo);
     resetGame();
-    // _playerTwo.setName() = document.getElementById('player-two-input').textContent;
   }
 
   _renderNewPlayer = player => {
     let name;
     let id;
     let displayID;
-    let scoreID;
     if (player === _playerOne) {
       id = 'player-one-input';
       displayID = 'player-one-name';
@@ -55,7 +51,6 @@ const displayController = ((activeBoard, ties) => {
         document.getElementById(displayID).textContent = `${name}'s score:`;
     }
   }
-    //name = document.getElementById(id).textContent;
     updateScore(player);
   };
 
@@ -103,26 +98,28 @@ const displayController = ((activeBoard, ties) => {
 
   const makeAIMove = () => {
     displayController.setGameInProgress(false);
+    let move;
     setTimeout(function() {
-      const validMoves = gameboard.getValidMoves();
-      const randomValue = Math.floor(Math.random()*validMoves.length);
-      //console.log(validMoves[randomValue]);
-      let isXPlayer = getCurrentPlayer().getIcon() === 'x';
-      const moveList = minimax(gameboard, 1000, isXPlayer, true);
-      //console.table(moveList);
-      const bestMove = moveList[0];
-      const box = document.querySelector('.'+validMoves[randomValue]);
-      const smartBox = document.querySelector('.'+bestMove.index);
-      //console.log(box);
+      if (_currentPlayer.getDifficulty() === 'easy') {
+        const validMoves = gameboard.getValidMoves();
+        const randomValue = Math.floor(Math.random()*validMoves.length);
+        move = document.querySelector('.'+validMoves[randomValue]);
+      } else {
+        let isXPlayer = getCurrentPlayer().getIcon() === 'x';
+        const moveList = minimax(gameboard, 100, isXPlayer, true);
+        console.table(moveList);
+        const bestMove = moveList[0];
+        move = document.querySelector('.'+bestMove.index);
+      }
       displayController.setGameInProgress(true);
-      MakeMove(smartBox);
+      MakeMove(move);
     },500)
   };
   // set up reset button
   const resetButton = document.getElementById('reset-board');
   resetButton.addEventListener('click', resetGame);
 
-  const statusButton = document.getElementById('check-status');
+  const statusButton = document.getElementById('scoring-status');
   statusButton.addEventListener('click', () => {
     let isXPlayer = getCurrentPlayer().getIcon() === 'x';
     let testBoard = Board(gameboard.getBoardState());
@@ -303,6 +300,7 @@ playerTwoToggle.forEach((item) => item.addEventListener('click', function(){
 function toggleHuman(e, set) {
   const human = document.querySelector('#human-'+set);
   const computer = document.querySelector('#computer-'+set);
+  const ai = document.querySelector('#computer-difficulty-'+set);
   const clicked = e;
   const player = set === 'one' ? playerOne : playerTwo;
 
@@ -310,11 +308,42 @@ function toggleHuman(e, set) {
     human.classList.add('active');
     computer.classList.remove('active');
     player.setHuman(true);
+    ai.classList.add('hide');
+    ai.classList.remove('first-trans');
   } else if (clicked === computer){
     computer.classList.add('active');
     human.classList.remove('active');
     player.setHuman(false);
+    if(ai.classList.contains('first-trans')) {
+      ai.classList.remove('first-trans');
+      ai.classList.add('trans');
+    }
+    ai.classList.remove('hide');
   } else {
     console.log(`error, ${e} is the selected element`);
+  }
+};
+
+const playerOneDifficulty = document.querySelector('#computer-difficulty-one').childNodes;
+playerOneDifficulty.forEach((item) => item.addEventListener('click', function(){
+  toggleDifficulty(item, 'one')}));
+
+const playerTwoDifficulty = document.querySelector('#computer-difficulty-two').childNodes;
+playerTwoDifficulty.forEach((item) => item.addEventListener('click', function(){
+  toggleDifficulty(item, 'two')}));
+
+function toggleDifficulty(e, set) {
+  const easy = document.querySelector('#computer-easy-'+set);
+  const hard = document.querySelector('#computer-hard-'+set);
+  const clicked = e;
+  const player = set === 'one' ? playerOne : playerTwo;
+  if (clicked === easy) {
+    easy.classList.add('active');
+    hard.classList.remove('active');
+    player.setDifficulty('easy');
+  } else if (clicked === hard) {
+    easy.classList.remove('active');
+    hard.classList.add('active');
+    player.setDifficulty('hard');
   }
 };
