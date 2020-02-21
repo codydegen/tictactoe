@@ -9,6 +9,7 @@ const Player = (name, icon, human, score) => {
   score = this.score || 0;
   const getScore = () => score;
   const incrementScore = () => ++score;
+  const resetScore = () => score = 0;
 
   return {
     getName,
@@ -18,5 +19,6 @@ const Player = (name, icon, human, score) => {
     setHuman,
     getScore,
     incrementScore,
+    resetScore,
   }
 };

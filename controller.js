@@ -10,7 +10,7 @@ const displayController = ((activeBoard, ties) => {
   let _numTies = ties || 0;
   let _activeBoard = activeBoard;
 
-  const startNewGame = () => {
+  const resetGame = () => {
     _currentPlayer = _playerOne;
     _allowMoves = true;
     _activeBoard.resetBoard();
@@ -19,6 +19,51 @@ const displayController = ((activeBoard, ties) => {
       makeAIMove();
     }
   };
+
+  const startNewGame = () => {
+    document.getElementById('game-container').classList.remove('hidden');
+    document.getElementById('controls-container').classList.add('hidden');
+    //_playerOne.setName(document.getElementById('player-one-input').textContent);
+    //_playerTwo.setName(document.getElementById('player-two-input').textContent);
+    _renderNewPlayer(_playerOne);
+    _renderNewPlayer(_playerTwo);
+    resetGame();
+    // _playerTwo.setName() = document.getElementById('player-two-input').textContent;
+  }
+
+  _renderNewPlayer = player => {
+    let name;
+    let id;
+    let displayID;
+    let scoreID;
+    if (player === _playerOne) {
+      id = 'player-one-input';
+      displayID = 'player-one-name';
+      name = document.getElementById(id).value;
+      if (name !== _playerOne.getName()) {
+        _playerOne.setName(name);
+        _playerOne.resetScore();
+        document.getElementById(displayID).textContent = `${name}'s score:`;
+      }
+    } else {
+      id = 'player-two-input';
+      displayID = 'player-two-name';
+      name = document.getElementById(id).value;
+      if (name !== _playerTwo.getName()) {
+        _playerTwo.setName(name);
+        _playerTwo.resetScore();
+        document.getElementById(displayID).textContent = `${name}'s score:`;
+    }
+  }
+    //name = document.getElementById(id).textContent;
+    updateScore(player);
+  };
+
+  const returnToMainMenu = () => {
+    document.getElementById('game-container').classList.add('hidden');
+    document.getElementById('controls-container').classList.remove('hidden');
+  }
+
   const getCurrentPlayer = () => _currentPlayer;
   const setCurrentPlayer = (playerOne, playerTwo) => {
     _currentPlayer = playerOne;
@@ -75,7 +120,7 @@ const displayController = ((activeBoard, ties) => {
   };
   // set up reset button
   const resetButton = document.getElementById('reset-board');
-  resetButton.addEventListener('click', startNewGame);
+  resetButton.addEventListener('click', resetGame);
 
   const statusButton = document.getElementById('check-status');
   statusButton.addEventListener('click', () => {
@@ -88,7 +133,11 @@ const displayController = ((activeBoard, ties) => {
     console.timeEnd('b');
   });
 
+  const startButton = document.getElementById('start-game');
+  startButton.addEventListener('click', startNewGame);
   //const 
+  const mainMenu = document.getElementById('main-menu');
+  mainMenu.addEventListener('click', returnToMainMenu);
 
   const updateScore = winner => {
     let scoreBlock;
@@ -221,7 +270,7 @@ const displayController = ((activeBoard, ties) => {
   }
 
   return {
-    startNewGame,
+    resetGame,
     getCurrentPlayer,
     setCurrentPlayer,
     getActiveBoard,
