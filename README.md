@@ -3,4 +3,5 @@ Creating a Tic-Tac-Toe game to practice object-oriented programming, based on Th
 
 # To-do
 * Make things look pretty
+* Fix issue with multiple resets
 * Enhance AI

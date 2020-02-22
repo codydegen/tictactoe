@@ -1,5 +1,5 @@
-let playerOne = Player('Bob', 'x', true, 0, 'easy');
-let playerTwo = Player('Fred', 'o', true, 0, 'easy');
+let playerOne = Player('Player One', 'x', true, 0, 'easy');
+let playerTwo = Player('Player Two', 'o', true, 0, 'easy');
 let gameboard = Board();
 
 displayController.setActiveBoard(gameboard);

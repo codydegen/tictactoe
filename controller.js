@@ -11,10 +11,13 @@ const displayController = ((activeBoard, ties) => {
   let _activeBoard = activeBoard;
 
   const resetGame = () => {
+    clearInterval(_aiSnippet);
     _currentPlayer = _playerOne;
     _allowMoves = true;
     _activeBoard.resetBoard();
     renderBoard();
+    setTimeout(function() {console.log('reset')}, 4000);
+    // sleep(2000);
     if (!_currentPlayer.getHuman()) {
       makeAIMove();
     }
@@ -36,7 +39,8 @@ const displayController = ((activeBoard, ties) => {
       id = 'player-one-input';
       displayID = 'player-one-name';
       name = document.getElementById(id).value;
-      if (name !== _playerOne.getName()) {
+      if (name !== _playerOne.getName() && name !== '') {
+        name = name || 'Player One';
         _playerOne.setName(name);
         _playerOne.resetScore();
         document.getElementById(displayID).textContent = `${name}'s score:`;
@@ -45,7 +49,8 @@ const displayController = ((activeBoard, ties) => {
       id = 'player-two-input';
       displayID = 'player-two-name';
       name = document.getElementById(id).value;
-      if (name !== _playerTwo.getName()) {
+      if (name !== _playerTwo.getName() && name !== '') {
+        name = name || 'Player Two';
         _playerTwo.setName(name);
         _playerTwo.resetScore();
         document.getElementById(displayID).textContent = `${name}'s score:`;
@@ -81,9 +86,15 @@ const displayController = ((activeBoard, ties) => {
         const selectedBox = document.querySelector(`.${coords}`);
         selectedBox.setAttribute('data-contents', tempBoard[i][j]);
         if(tempBoard[i][j] !== 0){
-          selectedBox.innerText = tempBoard[i][j];
+          //selectedBox.
+          selectedBox.classList.add('flip');
+          selectedBox.classList.add('flipper');
+          selectedBox.children[0].innerText = tempBoard[i][j];
+          //selectedBox.innerText = tempBoard[i][j];
         } else {
-          selectedBox.innerText = '';
+          selectedBox.classList.remove('flip');
+          // selectedBox.classList.remove('flipper');
+          //selectedBox.innerText = '';
         }
       }
     }
@@ -98,22 +109,28 @@ const displayController = ((activeBoard, ties) => {
 
   const makeAIMove = () => {
     displayController.setGameInProgress(false);
-    let move;
-    setTimeout(function() {
-      if (_currentPlayer.getDifficulty() === 'easy') {
-        const validMoves = gameboard.getValidMoves();
-        const randomValue = Math.floor(Math.random()*validMoves.length);
-        move = document.querySelector('.'+validMoves[randomValue]);
-      } else {
-        let isXPlayer = getCurrentPlayer().getIcon() === 'x';
-        const moveList = minimax(gameboard, 100, isXPlayer, true);
-        console.table(moveList);
-        const bestMove = moveList[0];
-        move = document.querySelector('.'+bestMove.index);
-      }
-      displayController.setGameInProgress(true);
-      MakeMove(move);
-    },500)
+    // sleep(600);
+    //let move;
+    
+    setTimeout(_aiSnippet,601);
+  };
+
+  _aiSnippet = () => {
+    clearInterval(_aiSnippet);
+    if (_currentPlayer.getDifficulty() === 'easy') {
+      const validMoves = gameboard.getValidMoves();
+      const randomValue = Math.floor(Math.random()*validMoves.length);
+      move = document.querySelector('.'+validMoves[randomValue]);
+    } else {
+      let isXPlayer = getCurrentPlayer().getIcon() === 'x';
+      const moveList = minimax(gameboard, 100, isXPlayer, true);
+      console.table(moveList);
+      const bestMove = moveList[0];
+      move = document.querySelector('.'+bestMove.index);
+    }
+    displayController.setGameInProgress(true);
+    MakeMove(move);
+    clearInterval(_aiSnippet);
   };
   // set up reset button
   const resetButton = document.getElementById('reset-board');
@@ -212,11 +229,21 @@ const displayController = ((activeBoard, ties) => {
       for (let j = 0; j < 3; j++){
   
         let el = document.createElement('div');
+        let front = document.createElement('div');
+        let back = document.createElement('div');
         el.classList.add('box');
         el.classList.add('x'+i+'y'+j);
+        front.classList.add('x'+i+'y'+j);
+        back.classList.add('x'+i+'y'+j);
+        front.classList.add('front');
+        //front.innerText = 'hello';
+        back.classList.add('back');
         el.setAttribute('data-contents', '0');
         // do some stuff
+        el.appendChild(back);
+        el.appendChild(front);
         container.appendChild(el);
+        el.appendChild(front);
       }
     }
     const boxes = document.querySelectorAll('.box');
@@ -233,7 +260,9 @@ const displayController = ((activeBoard, ties) => {
   }
 
   const MakeMove = box => {
-    const coords = box.classList[1];
+    //box.classList.
+    const coords = box.classList.toString().match(/\b\w\d\w\d/)[0];
+    const match = coords.match(/\b\w\d\w\d/)[0];
     const x = coords.charAt(1);
     const y = coords.charAt(3);
     const currentPlayer = displayController.getCurrentPlayer();
@@ -247,7 +276,7 @@ const displayController = ((activeBoard, ties) => {
         if (winner === 'tie') {
           _numTies++;
           updateScore('tie');
-          alert('you tied.');
+          alert('You tied.');
         } else {
         if(winner === _playerOne.getIcon()) {
           _playerOne.incrementScore();
@@ -347,3 +376,7 @@ function toggleDifficulty(e, set) {
     player.setDifficulty('hard');
   }
 };
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
