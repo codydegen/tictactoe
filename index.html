@@ -24,8 +24,10 @@
 
   <div id="controls-container" class="display-grid">
     <div id="player-one-container" class="user-containers">
+      <div class="name-container">
       <label for="player-one-input">Player One Name</label>
       <input type="text" name="player-one" id="player-one-input">
+    </div>
       <ul id="human-computer-toggle-one">
         <li id="human-one" class="active">Human</li>
         <li id="computer-one" >Computer</li>
@@ -34,14 +36,16 @@
         <li id="computer-easy-one" class="active">Easy</li>
         <li id="computer-hard-one" >Hard</li>
       </ul>
-      <br>
-      <br>
+      <!-- <br> -->
+      <!-- <br> -->
 
     </div>
   
     <div id="player-two-container" class="user-containers">
+      <div class="name-container">
       <label for="player-two-input">Player Two Name</label>
       <input type="text" name="player-two" id="player-two-input">
+    </div>
       <ul id="human-computer-toggle-two">
         <li id="human-two" class="active">Human</li>
         <li id="computer-two" >Computer</li>
@@ -62,10 +66,12 @@
     
     <!-- Javascript-populated -->
   </div>
-  <button id="reset-board">Reset</button>
-  <button id="main-menu">Return to Main Menu</button>
-  <button id="scoring-status">Scoring Status</button>
+  <div id="button-container">
+    <button id="reset-board">Reset</button>
+    <button id="main-menu">Return to Main Menu</button>
+    <button id="scoring-status">Scoring Status</button>
   <!-- to-do: add scoring for different squares -->
+</div>
 </div>
 <footer>
   <a id="contact-info">
