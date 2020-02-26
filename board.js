@@ -94,7 +94,6 @@ const Board = (boardInp) => {
     getValidMoves,
     checkEnd,
     resetBoard,
-
   }
 };
 

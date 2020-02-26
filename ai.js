@@ -2,15 +2,19 @@ function minimax(board, depth, maximizingPlayer, topLevel) {
   let endState = board.checkEnd();
   let vm = board.getValidMoves().length;
   if (depth === 0 || vm === 0 || endState !== false) {
+    let finalScore;
     if (endState === 'tie') {
-      return {score: 0};
+      finalScore = {score: 0};
     } else if (endState === 'x') {
-      return {score: 1000+depth}; 
+      finalScore = {score: 1000+depth}; 
     } else if (endState === 'o') {
-      return {score: -1000-depth};
+      finalScore = {score: -1000-depth};
     } else {
       alert('depth reached');
     }
+    finalScore.index = -1;
+    if(topLevel) return [finalScore];
+    return finalScore;
   }
   const validMoves = board.getValidMoves();
   let moves = [];

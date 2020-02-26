@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>CD Commit 16 Tic Tac Toe</title>
-  <link href='http://fonts.googleapis.com/css?family=Merienda+One' rel='stylesheet' type='text/css'>
+  <title>CD Commit 19 Tic Tac Toe</title>
+  <link href='https://fonts.googleapis.com/css?family=Merienda+One' rel='stylesheet' type='text/css'>
   <link  rel="stylesheet" href="styles.css">
   
   <!-- favicons -->
@@ -36,8 +36,6 @@
         <li id="computer-easy-one" class="active">Easy</li>
         <li id="computer-hard-one" >Hard</li>
       </ul>
-      <!-- <br> -->
-      <!-- <br> -->
 
     </div>
   
@@ -62,14 +60,18 @@
   <div id="score-container">
     <!-- Javascript-populated -->
   </div>
-  <div id="board-container">
+  <div id="board-container-flipper" class="flip-container-container flipper">
+    <div id="board-container-back" class="back-container back"></div>
+  <div id="board-container" class="front-container">
+    
     
     <!-- Javascript-populated -->
   </div>
+</div>
   <div id="button-container">
     <button id="reset-board">Reset</button>
     <button id="main-menu">Return to Main Menu</button>
-    <button id="scoring-status">Scoring Status</button>
+    <button id="scoring-status">Board Analysis</button>
   <!-- to-do: add scoring for different squares -->
 </div>
 </div>

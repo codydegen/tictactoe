@@ -3,21 +3,25 @@
 
 // create a display controller using a module
 const displayController = ((activeBoard, ties) => {
-  let _allowMoves = true;
+  let _gameStatus = true;
+  let _movesAllowed = true;
   let _playerOne = null;
   let _playerTwo = null;
   let _currentPlayer = null;
+  let x;
   let _numTies = ties || 0;
   let _activeBoard = activeBoard;
 
   const resetGame = () => {
-    clearInterval(_aiSnippet);
+    clearTimeout(x);
     _currentPlayer = _playerOne;
-    _allowMoves = true;
+    setGameInProgress(true);
+    _setMovesAllowed(true);
     _activeBoard.resetBoard();
     renderBoard();
-    setTimeout(function() {console.log('reset')}, 4000);
+    //setTimeout(function() {console.log('reset')}, 4000);
     // sleep(2000);
+    document.getElementById('board-container-flipper').classList.remove('full-flip');
     if (!_currentPlayer.getHuman()) {
       makeAIMove();
     }
@@ -28,7 +32,9 @@ const displayController = ((activeBoard, ties) => {
     document.getElementById('controls-container').classList.add('hidden');
     _renderNewPlayer(_playerOne);
     _renderNewPlayer(_playerTwo);
+    
     resetGame();
+    
   }
 
   _renderNewPlayer = player => {
@@ -94,31 +100,42 @@ const displayController = ((activeBoard, ties) => {
         } else {
           selectedBox.classList.remove('flip');
           // selectedBox.classList.remove('flipper');
-          //selectedBox.innerText = '';
+          selectedBox.children[0].innerText = '';
         }
       }
     }
   };
 
   const setGameInProgress = status => {
-    _allowMoves = status;
+    _gameStatus = status;
   }
   const getGameInProgress = () => {
-    return _allowMoves;
+    return _gameStatus;
+  }
+
+  const _setMovesAllowed = allowed => {
+    _movesAllowed = allowed;
+  }
+  const _getMovesAllowed = () => {
+    return _movesAllowed;
   }
 
   const makeAIMove = () => {
-    displayController.setGameInProgress(false);
+    _setMovesAllowed(false);
     // sleep(600);
     //let move;
     
-    setTimeout(_aiSnippet,601);
+    x = setTimeout(_aiSnippet,500);
   };
 
   _aiSnippet = () => {
-    clearInterval(_aiSnippet);
+    //clearInterval(_aiSnippet);
     if (_currentPlayer.getDifficulty() === 'easy') {
       const validMoves = gameboard.getValidMoves();
+      if(validMoves.length === 0) {
+        console.log('game over');
+        return;
+      }
       const randomValue = Math.floor(Math.random()*validMoves.length);
       move = document.querySelector('.'+validMoves[randomValue]);
     } else {
@@ -126,11 +143,18 @@ const displayController = ((activeBoard, ties) => {
       const moveList = minimax(gameboard, 100, isXPlayer, true);
       console.table(moveList);
       const bestMove = moveList[0];
+      if(bestMove.index !== -1){
       move = document.querySelector('.'+bestMove.index);
+    } else {
+      return;
     }
-    displayController.setGameInProgress(true);
+    }
+    _setMovesAllowed(true);
+    clearTimeout(x);
     MakeMove(move);
-    clearInterval(_aiSnippet);
+    
+    
+    
   };
   // set up reset button
   const resetButton = document.getElementById('reset-board');
@@ -248,12 +272,29 @@ const displayController = ((activeBoard, ties) => {
     }
     const boxes = document.querySelectorAll('.box');
     //console.log(boxes);
-    boxes.forEach((item) => item.addEventListener('click', makeHumanMove));
-
+    boxes.forEach((item) => {item.addEventListener('click', makeHumanMove,); console.log('added click listener to '+ item);});
+    boxes.forEach((item) => item.addEventListener('transitionstart', () => {
+      if(!getCurrentPlayer().getHuman()){
+        _setMovesAllowed(false);
+      }
+      
+    }));
+    boxes.forEach((item) => item.addEventListener('transitionend', () => {
+      //if game is in progress
+      _setMovesAllowed(true);
+      clearTimeout(x);
+      //setGameInProgress(true);
+      if(!getCurrentPlayer().getHuman()){
+        makeAIMove();
+      }
+      console.log('move ended');
+      
+    }));
+    document.querySelector('.box.x0y0').addEventListener('click', () => {console.log('test');});
   }
 
   const makeHumanMove = e => {
-    //console.log(e);
+    // console.log(e);
     const box = e.target;
     //console.log(box);
     MakeMove(box);  
@@ -262,21 +303,26 @@ const displayController = ((activeBoard, ties) => {
   const MakeMove = box => {
     //box.classList.
     const coords = box.classList.toString().match(/\b\w\d\w\d/)[0];
-    const match = coords.match(/\b\w\d\w\d/)[0];
+    //const match = coords.match(/\b\w\d\w\d/)[0];
     const x = coords.charAt(1);
     const y = coords.charAt(3);
     const currentPlayer = displayController.getCurrentPlayer();
     const activeBoard = displayController.getActiveBoard().getBoardState();
-    if(activeBoard[x][y] === 0 & displayController.getGameInProgress()) {
+    if(activeBoard[x][y] === 0 && displayController.getGameInProgress() && _getMovesAllowed()) {
       displayController.getActiveBoard().updateBoard(coords, currentPlayer.getIcon());
       displayController.swapCurrentPlayer();
       displayController.renderBoard();
       let winner = gameboard.checkEnd();
       if(winner !== false) {
+        clearTimeout(x);
+        document.getElementById('board-container-flipper').classList.add('full-flip');
         if (winner === 'tie') {
           _numTies++;
           updateScore('tie');
-          alert('You tied.');
+          // alert('You tied.');
+          //document.getElementById('board-container-flipper').classList.toggle('full-flip');
+          
+          //document.getElementById('board-container-flipper').classList.toggle('full-flip');
         } else {
         if(winner === _playerOne.getIcon()) {
           _playerOne.incrementScore();
@@ -285,7 +331,7 @@ const displayController = ((activeBoard, ties) => {
           _playerTwo.incrementScore();
           updateScore(_playerTwo);
         }
-        alert(winner+ ' wins!');
+        // alert(winner+ ' wins!');
       }
         displayController.setGameInProgress(false);
         
@@ -376,7 +422,3 @@ function toggleDifficulty(e, set) {
     player.setDifficulty('hard');
   }
 };
-
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
