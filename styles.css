@@ -160,6 +160,8 @@ header {
   text-align: center;
   width: 150px;
   font-weight: 600;
+  height: 82px;
+  background-color: white;
 }
 
 .user-containers {
@@ -309,21 +311,22 @@ a:visited {
 .flip-container {
   perspective: 10px;
 }
-  /* flip the pane when hovered */
-  /* .flip-container:hover .flipper, .flip-container.hover .flipper {
-    transform: rotateY(180deg);
-  } */
 
-  .back { 
+.back { 
   font: 400 100px/1.0 'Merienda One', Helvetica, sans-serif;
   color: rgba(0,0,0,0.7);
   text-shadow: 3px 3px 3px #fff;
   text-align: center;
   }
+
 .flip-container, .front, .back {
   width: 100%;
   height: 100%;
   transition: 0.6s;
+  backface-visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 /* flip speed goes here */
@@ -335,21 +338,25 @@ a:visited {
    potentially something invisible sitting on what i'm trying to click. */
 }
 
-/* hide back of pane during swap */
-.front, .back {
-  backface-visibility: hidden;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
 /* front pane, placed above back */
-.front {
+.box > .front {
   background-color: var(--color2);
   z-index: 3;
   transition: 0.6s;
   /* for firefox 31 */
   transform: rotateY(0deg);
+}
+
+.score-block > .back {
+  background-color: var(--color3);
+  font-size: 24px;
+  line-height: normal;
+  text-shadow: none;
+}
+
+#tie-scorebug-back {
+  background-color: lightgray;
+  line-height: 72px;
 }
 
 /* back, initially hidden pane */
@@ -360,20 +367,26 @@ a:visited {
   z-index: 1;
 }
 
-.flipper.flip, .flip-container.flip  {
-	transform: rotateY(180deg);
+.flip {
+  transform: rotateY(180deg);
+  
+  transition: 0.6s;
 }
 
 .full-flip {
   /* opacity: 0; */
+  transition: 0.6s;
   animation: full-flip 1s 1;
   animation-fill-mode: forwards;
+  transform-style: preserve-3d;
+
   /* animation-delay: 0.8s; */
 }
 
 .flip-delay {
   animation-duration: 1.5s;
   animation-delay: 0.8s;
+  transition-delay: 2.3s;
 }
 
 @keyframes full-flip {

@@ -14,6 +14,14 @@ const displayController = ((activeBoard, ties) => {
 
   const resetGame = () => {
     clearTimeout(x);
+    let scoreNodes = Array.from(document.getElementById('score-container').children);
+    scoreNodes.forEach((item) => {
+      item.classList.remove('flip-delay');
+      item.classList.remove('flip');
+      setTimeout(() => {
+        item.classList.toggle('flip-delay');
+      }, 2000);
+    });
     _currentPlayer = _playerOne;
     setGameInProgress(true);
     _setMovesAllowed(true);
@@ -62,7 +70,7 @@ const displayController = ((activeBoard, ties) => {
         document.getElementById(displayID).textContent = `${name}'s score:`;
     }
   }
-    updateScore(player);
+    updateScore(player, true);
   };
 
   const returnToMainMenu = () => {
@@ -221,7 +229,8 @@ const displayController = ((activeBoard, ties) => {
 
 
 
-  const updateScore = winner => {
+  const updateScore = (winner, newName) => {
+    //newName = this.newName || false;
     let scoreBlock;
     let score;
     if (winner === 'tie') {
@@ -236,15 +245,21 @@ const displayController = ((activeBoard, ties) => {
       scoreBlock = document.getElementById('player-two-score');
       //console.log('player two');
     }
+    
     score = winner.getScore();
   }
-  scoreBlock.innerText = score;
+  let timeout = newName ? 0 : 2500;
+  
+  setTimeout(() => {scoreBlock.innerText = score;}, timeout)
+  
 }
 
   const isObject = a => a != null && a.constructor === Object;
 
 
   const _createScoreBlock = (player) => {
+    let backElement = document.createElement('div');
+    let containerElement = document.createElement('div');
     let element = document.createElement('div');
     let nameElement = document.createElement('div');
     let scoreElement = document.createElement('div');
@@ -266,6 +281,7 @@ const displayController = ((activeBoard, ties) => {
       score = player.getScore();
       name = player.getHuman() ? player.getName() : 'AI';
       nameElement.innerText = `${name}\'s score:`;
+      backElement.innerText = `${name} Wins!`;
     } else {
       elementId = 'tie-scorebug';
       nameElementId = 'tie-name';
@@ -273,16 +289,25 @@ const displayController = ((activeBoard, ties) => {
       name = 'Ties';
       nameElement.innerText = `${name}:`;
       score = 0;
+      backElement.innerText = `You Tied.`;
     }
+    backElement.setAttribute('id', elementId+'-back');
+    backElement.classList.add('back');
+    
+    element.classList.add('front');
+    containerElement.setAttribute('id', elementId+'-container');
+    containerElement.setAttribute('class', 'flipper flip-delay');
     element.setAttribute('id', elementId);
     nameElement.setAttribute('id', nameElementId);
     scoreElement.setAttribute('id', scoreElementId);
-    element.setAttribute('class', 'score-block');
+    containerElement.classList.add('score-block');
 
     scoreElement.innerText = score;
     element.appendChild(nameElement);
     element.appendChild(scoreElement);
-    return element;
+    containerElement.appendChild(backElement);
+    containerElement.appendChild(element);
+    return containerElement;
   }
 
   const render = () => {
@@ -331,7 +356,7 @@ const displayController = ((activeBoard, ties) => {
       if(!getCurrentPlayer().getHuman()){
         makeAIMove();
       }
-      console.log('move ended');
+      // console.log('move ended');
       
     }));
     document.querySelector('.box.x0y0').addEventListener('click', () => {console.log('test');});
@@ -360,9 +385,13 @@ const displayController = ((activeBoard, ties) => {
       if(winner !== false) {
         clearTimeout(x);
         document.getElementById('board-container-flipper').classList.add('full-flip');
+
+        // scoreBlock.classList.add('flip-delay');
+
         if (winner === 'tie') {
           _numTies++;
-          updateScore('tie');
+          updateScore('tie', false);
+          document.getElementById('tie-scorebug-container').classList.add('flip');
           // alert('You tied.');
           //document.getElementById('board-container-flipper').classList.toggle('full-flip');
           
@@ -370,10 +399,12 @@ const displayController = ((activeBoard, ties) => {
         } else {
         if(winner === _playerOne.getIcon()) {
           _playerOne.incrementScore();
-          updateScore(_playerOne);
+          document.getElementById('player-one-scorebug-container').classList.add('flip');
+          updateScore(_playerOne, false);
         } else {
           _playerTwo.incrementScore();
-          updateScore(_playerTwo);
+          document.getElementById('player-two-scorebug-container').classList.add('flip');
+          updateScore(_playerTwo, false);
         }
         // alert(winner+ ' wins!');
       }
