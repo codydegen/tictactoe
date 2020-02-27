@@ -101,6 +101,7 @@ const displayController = ((activeBoard, ties) => {
           selectedBox.classList.remove('flip');
           // selectedBox.classList.remove('flipper');
           selectedBox.children[0].innerText = '';
+          selectedBox.children[1].innerText = '';
         }
       }
     }
@@ -156,26 +157,69 @@ const displayController = ((activeBoard, ties) => {
     
     
   };
+  const analyzeBoard = () => {
+    let isXPlayer = getCurrentPlayer().getIcon() === 'x';
+    let testBoard = Board(gameboard.getBoardState());
+    const depth = 100;
+    let a = minimax(testBoard,depth,isXPlayer,true);
+    let status;
+    let remainingMoves;
+    a.forEach((item) => {
+      
+      if (item.score === 0) {
+        remainingMoves = Math.ceil((a.length-1)/2);
+        status = `Tie in ${remainingMoves} turn`;
+        
+      } else if (item.score > 0) {
+        remainingMoves = Math.ceil((1000 + depth - item.score)/2);
+        status = `X wins in ${remainingMoves} turn`;
+      } else {
+        remainingMoves = Math.ceil((1000 + depth + item.score)/2);
+        status = `Y wins in ${remainingMoves} turn`;
+      }
+
+      if (remainingMoves !== 1) {
+        status+='s';
+      }
+      item.status = status;
+      // console.log(item, remainingMoves);
+      if(item.index !== -1){
+        printAnalysis(item);
+      }
+    });
+  }
+
+  const printAnalysis = (item) => {
+    const coords = item.index;
+    const selectedBox = document.querySelector(`.${coords}`);
+    selectedBox.classList.add('flipper');
+
+    selectedBox.classList.add('full-flip');
+    setTimeout(() => {
+      // setTimeout(() => {
+        setTimeout(() => {
+          selectedBox.classList.remove('full-flip')
+        }, 400)
+        selectedBox.children[1].innerText = item.status;
+      // }, 0);
+  }, 700);
+    // selectedBox.classList.remove('full-flip');
+  };
+
   // set up reset button
   const resetButton = document.getElementById('reset-board');
   resetButton.addEventListener('click', resetGame);
 
-  const statusButton = document.getElementById('scoring-status');
-  statusButton.addEventListener('click', () => {
-    let isXPlayer = getCurrentPlayer().getIcon() === 'x';
-    let testBoard = Board(gameboard.getBoardState());
-    //testBoard.resetBoard();
-    //console.log(gameboard.getValidMoves());
-    console.time('b');
-    //console.table(minimax(testBoard,100,isXPlayer,true));
-    console.timeEnd('b');
-  });
+  const boardAnalysis = document.getElementById('board-analysis');
+  boardAnalysis.addEventListener('click', analyzeBoard);
 
   const startButton = document.getElementById('start-game');
   startButton.addEventListener('click', startNewGame);
   //const 
   const mainMenu = document.getElementById('main-menu');
   mainMenu.addEventListener('click', returnToMainMenu);
+
+
 
   const updateScore = winner => {
     let scoreBlock;
@@ -272,7 +316,7 @@ const displayController = ((activeBoard, ties) => {
     }
     const boxes = document.querySelectorAll('.box');
     //console.log(boxes);
-    boxes.forEach((item) => {item.addEventListener('click', makeHumanMove,); console.log('added click listener to '+ item);});
+    boxes.forEach((item) => {item.addEventListener('click', makeHumanMove,); /*console.log('added click listener to '+ item);*/});
     boxes.forEach((item) => item.addEventListener('transitionstart', () => {
       if(!getCurrentPlayer().getHuman()){
         _setMovesAllowed(false);
