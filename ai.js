@@ -82,7 +82,9 @@ function minimax(board, depth, maximizingPlayer, topLevel) {
   const randomBestMove = bestMoveList[Math.floor(Math.random()*bestMoveList.length)];
   if(topLevel) {
     console.log(bestMoveList);
+    moves.sort((a,b) => (a.score < b.score) ? 1 : -1);
     moves.unshift(randomBestMove);
+
     return moves;
   } else {
   return randomBestMove;

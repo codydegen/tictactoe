@@ -4,5 +4,5 @@ Creating a Tic-Tac-Toe game to practice object-oriented programming, based on Th
 Current build found [here](https://codydegen.github.io/tictactoe/).
 
 # To-do
-* Make things look pretty
-* Enhance AI
+* Enhance AI (maybe)
+* Clean up code (maybe)

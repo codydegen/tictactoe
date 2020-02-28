@@ -31,46 +31,66 @@ const Board = (boardInp) => {
   };
 
   const checkEnd = () => {
-    if(_checkWinDiag() !== false) return _checkWinDiag();
-    if(_checkWinHoriz() !== false ) return _checkWinHoriz();
-    if(_checkWinVert() !== false) return _checkWinVert();
+    if(_checkWinDiag('player') !== false) return _checkWinDiag('player');
+    if(_checkWinHoriz('player') !== false ) return _checkWinHoriz('player');
+    if(_checkWinVert('player') !== false) return _checkWinVert('player');
     if(_checkTie() !== false) return _checkTie();
     return false;
     //check if a player has won
   };
 
-  const _checkWinDiag = () => {
+  const _checkWinDiag = (mode) => {
     const winningPlayer = _boardState[1][1];
     if(winningPlayer === 0) return false;
     if(_boardState[0][0] === _boardState[2][2] && _boardState[0][0] === winningPlayer){
-      return winningPlayer;
+      if(mode === 'player') {
+        return winningPlayer;
+      } else {
+        let moves = [`x0y0`, `x1y1`, `x2y2`];
+        return moves;
+      }
     } else if (_boardState[2][0] === _boardState[0][2] && _boardState[2][0] === winningPlayer){
-      return winningPlayer;
+      if(mode === 'player') {
+        return winningPlayer;
+      } else {
+        let moves = [`x2y0`, `x1y1`, `x0y2`];
+        return moves;
+      }
     } else return false;
   };
 
-  const _checkWinHoriz = () => {
+  const _checkWinHoriz = (mode) => {
     let winningPlayer = 0;
     for(let i = 0; i < 3; i++) {
       winningPlayer = _boardState[i][0];
       if(winningPlayer !== 0) {
         if(winningPlayer === _boardState[i][1] && winningPlayer === _boardState[i][2]) {
           //console.log('horiz win, row '+i);
-          return winningPlayer;
+          if(mode === 'player') {
+            return winningPlayer;
+          } else {
+            let moves = [`x${i}y0`, `x${i}y1`, `x${i}y2`];
+            return moves;
+          }
         }
       }
     }
     return false;
   }
 
-  const _checkWinVert = () => {
+  const _checkWinVert = (mode) => {
     let winningPlayer = 0;
     for(let i = 0; i < 3; i++) {
       winningPlayer = _boardState[0][i];
       if(winningPlayer !== 0) {
         if(winningPlayer === _boardState[1][i] && winningPlayer === _boardState[2][i]) {
           //console.log('vert win, column '+i);
-          return winningPlayer;
+          if(mode === 'player') {
+            return winningPlayer;
+          } else {
+            let moves = [`x0y${i}`, `x1y${i}`, `x2y${i}`];
+            return moves;
+          }
         }
       }
     }
@@ -80,6 +100,15 @@ const Board = (boardInp) => {
   const _checkTie = () => {
     return getValidMoves().length === 0 ? 'tie' : false;
   }
+
+  const getWinningMoves = () => {
+    let winningMoves = [];
+    if(!checkEnd()) return winningMoves;
+    if(_checkWinDiag('player') !== false) return _checkWinDiag('moves');
+    if(_checkWinHoriz('player') !== false ) return _checkWinHoriz('moves');
+    if(_checkWinVert('player') !== false) return _checkWinVert('moves');
+    return winningMoves;
+  };
 
   const resetBoard = () => {
   _boardState = [[0, 0, 0],
@@ -94,6 +123,7 @@ const Board = (boardInp) => {
     getValidMoves,
     checkEnd,
     resetBoard,
+    getWinningMoves,
   }
 };
 

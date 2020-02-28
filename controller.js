@@ -109,6 +109,16 @@ const displayController = ((activeBoard, ties) => {
           selectedBox.classList.remove('flip');
           // selectedBox.classList.remove('flipper');
           selectedBox.children[0].innerText = '';
+          if(selectedBox.children[1].innerText !== '') {
+            _fullFlip(selectedBox);
+            selectedBox.children[1].setAttribute('data-move-quality', '');
+          }
+
+          // if(selectedBox.children[0].getAttribute('data-move-quality') === 'good' || selectedBox.children[0].getAttribute('data-move-quality') === 'neutral'){
+            selectedBox.children[0].setAttribute('data-move-quality', '');
+            selectedBox.children[1].setAttribute('data-move-quality', '');
+
+          // }
           selectedBox.children[1].innerText = '';
         }
       }
@@ -172,24 +182,54 @@ const displayController = ((activeBoard, ties) => {
     let a = minimax(testBoard,depth,isXPlayer,true);
     let status;
     let remainingMoves;
+    let rel;
+    let highScore = a[1].score;
+    let lowScore = a[a.length-1].score;
     a.forEach((item) => {
       
       if (item.score === 0) {
         remainingMoves = Math.ceil((a.length-1)/2);
         status = `Tie in ${remainingMoves} turn`;
-        
+        rel = 'neutral';
       } else if (item.score > 0) {
         remainingMoves = Math.ceil((1000 + depth - item.score)/2);
         status = `X wins in ${remainingMoves} turn`;
+        if(isXPlayer){
+          if(item.score < highScore) {
+            rel = 'good';
+          } else {
+            rel = 'best';
+          }
+         } else {
+            if(item.score < highScore) {
+              rel = 'bad';
+            } else {
+              rel = 'worst';
+            }
+          }
       } else {
         remainingMoves = Math.ceil((1000 + depth + item.score)/2);
-        status = `Y wins in ${remainingMoves} turn`;
+        status = `O wins in ${remainingMoves} turn`;
+        if(!isXPlayer){
+          if(item.score > lowScore) {
+            rel = 'good';
+          } else {
+            rel = 'best';
+          }
+         } else {
+            if(item.score > lowScore) {
+              rel = 'bad';
+            } else {
+              rel = 'worst';
+            }
+          }
       }
 
       if (remainingMoves !== 1) {
         status+='s';
       }
       item.status = status;
+      item.rel = rel;
       // console.log(item, remainingMoves);
       if(item.index !== -1){
         printAnalysis(item);
@@ -203,6 +243,7 @@ const displayController = ((activeBoard, ties) => {
     selectedBox.classList.add('flipper');
 
     selectedBox.classList.add('full-flip');
+    selectedBox.children[1].setAttribute('data-move-quality', item.rel);
     setTimeout(() => {
       // setTimeout(() => {
         setTimeout(() => {
@@ -409,12 +450,40 @@ const displayController = ((activeBoard, ties) => {
         // alert(winner+ ' wins!');
       }
         displayController.setGameInProgress(false);
-        
+        _endRender();
       } else if(!displayController.getCurrentPlayer().getHuman()) {
         displayController.makeAIMove();
       }
     }
   }
+
+  const _fullFlip = box => {
+    box.classList.add('full-flip');
+    setTimeout(() => {
+      // setTimeout(() => {
+        setTimeout(() => {
+          box.classList.remove('full-flip')
+        }, 400)
+      // }, 0);
+  }, 700);
+  }
+
+  const _endRender = () => {
+    for(let i = 0; i <= 2; i++){
+      for(let j = 0; j <= 2; j++){
+        let allCoords = `x${i}y${j}`;
+        let allBox = document.querySelector(`.${allCoords}`);
+        allBox.children[0].setAttribute('data-move-quality', 'neutral');
+        allBox.children[1].setAttribute('data-move-quality', 'neutral');
+      }
+    }
+
+    let winningMoves = gameboard.getWinningMoves();
+        winningMoves.forEach((item) => {
+          const selectedBox = document.querySelector(`.${item}`);
+          selectedBox.children[0].setAttribute('data-move-quality', 'good');
+        });
+  };
 
   return {
     resetGame,
