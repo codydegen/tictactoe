@@ -458,10 +458,6 @@ a:visited {
   background-color: var(--worst);
 }
 
-#game-container {
-  pointer-events: none;
-}
-
 /* 
 body {
   background-color: aquamarine;
