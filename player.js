@@ -3,6 +3,7 @@
 const Player = (name, icon, human, score, difficulty) => {
   const getName = () => name;
   const setName = newName => name = newName;
+  // Icon ended up not being used but it's there just in case i want to extend this in the future
   const getIcon = () => icon;
   const getHuman = () => human;
   const setHuman = newHuman => human = newHuman;

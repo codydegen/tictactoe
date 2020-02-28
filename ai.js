@@ -1,6 +1,13 @@
+/* 
+Board is the gameboard that's being analyzed,
+depth is the number of moves that are being searched.  For tic-tac-toe this is a trivial amount but for a larger game it may be of concern.
+Maximizing player is the player who is currently trying to make the best move
+topLevel is a check to see if this is the outermost loop or a recursive loop. The outermost loop returns additional information.
+*/
 function minimax(board, depth, maximizingPlayer, topLevel) {
   let endState = board.checkEnd();
   let vm = board.getValidMoves().length;
+  // check if the board analyzed is an end state
   if (depth === 0 || vm === 0 || endState !== false) {
     let finalScore;
     if (endState === 'tie') {
@@ -10,6 +17,7 @@ function minimax(board, depth, maximizingPlayer, topLevel) {
     } else if (endState === 'o') {
       finalScore = {score: -1000-depth};
     } else {
+      // shouldn't ever be hit but if i reuse this for more complicated game it may be
       alert('depth reached');
     }
     finalScore.index = -1;
@@ -18,10 +26,9 @@ function minimax(board, depth, maximizingPlayer, topLevel) {
   }
   const validMoves = board.getValidMoves();
   let moves = [];
-
+// use recursion to analyze every possible move and its end state
   if (maximizingPlayer) {
     let maxEval = -Infinity;
-    // for each child
     for (let  i=0; i<validMoves.length; i++){
       let move = {};
       move.index = validMoves[i];
@@ -49,7 +56,9 @@ function minimax(board, depth, maximizingPlayer, topLevel) {
     moves.push(move);
     }
   }
-  //console.table(moves);
+
+  // once the moves are all analyzed, determine the best move and return that.
+  // if multiple moves have the same value, return a random one from that set
   let bestMoveList = [];
   let bestMove = {};
   if (maximizingPlayer) {
@@ -81,7 +90,7 @@ function minimax(board, depth, maximizingPlayer, topLevel) {
   }
   const randomBestMove = bestMoveList[Math.floor(Math.random()*bestMoveList.length)];
   if(topLevel) {
-    console.log(bestMoveList);
+    // console.log(bestMoveList);
     moves.sort((a,b) => (a.score < b.score) ? 1 : -1);
     moves.unshift(randomBestMove);
 

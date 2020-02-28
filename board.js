@@ -6,12 +6,23 @@ const Board = (boardInp) => {
                        [0, 0, 0],
                        [0, 0, 0]];
   } else {
+    // this was done to copy the board by value instead of reference. 
+    // This was necessary in order to make the AI code work.
     _boardState = JSON.parse(JSON.stringify(boardInp));;
   }
   
   const getBoardState = () => _boardState;
   const setBoardState = inp => _boardState = inp; 
   const updateBoard = (coords, icon) => {
+    /* 
+    I realized a little too late and that i had switched my x and my y.  
+    Everything works right now so it probably won't be changed.
+      y - - - >
+    x  0 0 0
+    |  0 0 0
+    |  0 0 0
+    V
+    */
     const x = coords.charAt(1);
     const y = coords.charAt(3);
     _boardState[x][y] = icon;
@@ -31,6 +42,7 @@ const Board = (boardInp) => {
   };
 
   const checkEnd = () => {
+// check if the game is over. If so, return the player who won or the word tie. If not return false.
     if(_checkWinDiag('player') !== false) return _checkWinDiag('player');
     if(_checkWinHoriz('player') !== false ) return _checkWinHoriz('player');
     if(_checkWinVert('player') !== false) return _checkWinVert('player');
@@ -40,6 +52,7 @@ const Board = (boardInp) => {
   };
 
   const _checkWinDiag = (mode) => {
+// these subfunctions can return one of two things, either the winning player (or false), or the winning combination of moves.
     const winningPlayer = _boardState[1][1];
     if(winningPlayer === 0) return false;
     if(_boardState[0][0] === _boardState[2][2] && _boardState[0][0] === winningPlayer){
@@ -102,6 +115,7 @@ const Board = (boardInp) => {
   }
 
   const getWinningMoves = () => {
+    // get the winning combination of moves so that way they can be highlighted
     let winningMoves = [];
     if(!checkEnd()) return winningMoves;
     if(_checkWinDiag('player') !== false) return _checkWinDiag('moves');
