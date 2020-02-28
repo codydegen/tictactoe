@@ -3,6 +3,15 @@ Creating a Tic-Tac-Toe game to practice object-oriented programming, based on Th
 
 Current build found [here](https://codydegen.github.io/tictactoe/).
 
-# To-do
-* Enhance AI (maybe)
-* Clean up code (maybe)
+# Features
+
+The game allows for head-to-head play between two humans, for one human play against the computer, or for two computers to square off. The computer has two difficulties: easy (the computer makes a random move) or hard (the computer makes the optimal move). The user may also click the "board analysis" button to see the best and worst possible moves.
+
+# Example screens
+![Starting screen](/readme_pics/start.png)
+![Winning screen](/readme_pics/win.png)
+![Board analysis](/readme_pics/board-analysis.png)
+
+# Status
+
+The project is finished for now.

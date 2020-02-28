@@ -90,7 +90,9 @@ const displayController = ((activeBoard, ties) => {
   };
 
   const getActiveBoard = () => _activeBoard;
-  const setActiveBoard = newBoard => _activeBoard = newBoard;
+  const setActiveBoard = newBoard => {
+    return _activeBoard = newBoard;
+  };
   const renderBoard = () => {
     let tempBoard = _activeBoard.getBoardState();
     let coords;
@@ -366,6 +368,7 @@ const displayController = ((activeBoard, ties) => {
         let front = document.createElement('div');
         let back = document.createElement('div');
         el.classList.add('box');
+        el.classList.add('flipper');
         el.classList.add('x'+i+'y'+j);
         front.classList.add('x'+i+'y'+j);
         back.classList.add('x'+i+'y'+j);
